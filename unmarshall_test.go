@@ -4,8 +4,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/k0kubun/pp"
-
 	sourcepath "github.com/GeertJohan/go-sourcepath"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,9 +20,6 @@ func TestUnmarshalModel(t *testing.T) {
 	graph := model.GetGraph()
 	nodes := graph.GetNode()
 
-	pp.Println(nodes[1].GetName())
-
-	// assert.Equal(t, int32(256), nodes[0].GetName())
-	// assert.Equal(t, int32(256), model.GetHeight())
-	// assert.Equal(t, int32(3), blmodelob.GetChannels())
+	assert.Equal(t, "Conv", nodes[0].GetOpType())
+	assert.Equal(t, "Relu", nodes[1].GetOpType())
 }
