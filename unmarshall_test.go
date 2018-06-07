@@ -11,7 +11,7 @@ import (
 // TestUnmarshalModel ...
 func TestUnmarshalModel(t *testing.T) {
 
-	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "squeezenet", "model.onnx")
+	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "mnist", "mnist.onnx")
 
 	model, err := ReadModel(onnxModelFile)
 	assert.NoError(t, err)
@@ -20,6 +20,8 @@ func TestUnmarshalModel(t *testing.T) {
 	graph := model.GetGraph()
 	nodes := graph.GetNode()
 
-	assert.Equal(t, "Conv", nodes[0].GetOpType())
-	assert.Equal(t, "Relu", nodes[1].GetOpType())
+	assert.Equal(t, int64(3), model.GetIrVersion())
+	assert.Equal(t, "CNTK", model.GetProducerName())
+	assert.Equal(t, "Constant", nodes[0].GetOpType())
+	assert.Equal(t, "Div", nodes[1].GetOpType())
 }
