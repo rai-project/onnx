@@ -32,7 +32,7 @@ func ReadModelShareInfer(protoFileName string) (*ModelProto, error) {
 	if sharedProtoContentC == nil {
 		return nil, errors.Wrapf(err, "failed to shape infer %s", protoFileName)
 	}
-	//defer C.free(unsafe.Pointer(sharedProtoContentC))
+	defer C.free(unsafe.Pointer(sharedProtoContentC))
 	sharedProtoContent := C.GoString(sharedProtoContentC)
 
 	model := new(ModelProto)
