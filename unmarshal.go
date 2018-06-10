@@ -35,5 +35,6 @@ func unmarshalText(target proto.Message, protoFileName string) error {
 func ReadModel(protoFileName string) (*ModelProto, error) {
 	model := new(ModelProto)
 	err := unmarshal(model, protoFileName)
+
 	return model, err
 }

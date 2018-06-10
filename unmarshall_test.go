@@ -15,7 +15,7 @@ func TestUnmarshalModel(t *testing.T) {
 
 	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "mnist", "mnist.onnx")
 
-	model, err := ReadModelShareInfer(onnxModelFile)
+	model, err := ReadModelShapeInfer(onnxModelFile)
 	assert.NoError(t, err)
 	return
 	assert.NotEmpty(t, model)
@@ -25,8 +25,11 @@ func TestUnmarshalModel(t *testing.T) {
 
 	pp.Println(graph.GetName())
 
+	// assert.Equal(t, "Conv", nodes[0].GetOpType())
+	// assert.Equal(t, "Relu", nodes[1].GetOpType())
+
 	assert.Equal(t, int64(3), model.GetIrVersion())
-	assert.Equal(t, "CNTK", model.GetProducerName())
+	assert.Equal(t, "CNsTK", model.GetProducerName())
 	assert.Equal(t, "Constant", nodes[0].GetOpType())
 	assert.Equal(t, "Div", nodes[1].GetOpType())
 }
@@ -40,13 +43,13 @@ func XXXTestUnmarshalModel(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 
-	graph := model.GetGraph()
-	nodes := graph.GetNode()
+	// graph := model.GetGraph()
+	// nodes := graph.GetNode()
 
-	pp.Println(graph.GetName())
+	// pp.Println(graph.GetName())
 
-	assert.Equal(t, int64(3), model.GetIrVersion())
-	assert.Equal(t, "CNTK", model.GetProducerName())
-	assert.Equal(t, "Constant", nodes[0].GetOpType())
-	assert.Equal(t, "Div", nodes[1].GetOpType())
+	// assert.Equal(t, int64(3), model.GetIrVersion())
+	// assert.Equal(t, "CNTK", model.GetProducerName())
+	// assert.Equal(t, "Constant", nodes[0].GetOpType())
+	// assert.Equal(t, "Div", nodes[1].GetOpType())
 }

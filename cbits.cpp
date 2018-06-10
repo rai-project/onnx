@@ -14,10 +14,11 @@
 
 char *go_shape_inference(char *bytes) {
   using namespace ONNX_NAMESPACE;
+  unsigned int len = strlen(bytes);
   ModelProto proto{};
-  ParseProtoFromBytes(&proto, bytes, strlen(bytes));
+  ParseProtoFromBytes(&proto, bytes, len);
   shape_inference::InferShapes(proto);
-  std::string out;
-  proto.SerializeToString(&out);
-  return strdup(out.c_str());
+  char *out = new char[len];
+  proto.SerializeToArray(out, len);
+  return out;
 }
