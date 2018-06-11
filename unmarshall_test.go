@@ -10,28 +10,26 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestUnmarshalModel ...
-func TestUnmarshalModel(t *testing.T) {
+// TestModelShapeInfer ...
+func TestModelShapeInfer(t *testing.T) {
 
-	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "mnist", "mnist.onnx")
+	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
 
 	model, err := ReadModelShapeInfer(onnxModelFile)
 	assert.NoError(t, err)
-	return
 	assert.NotEmpty(t, model)
 
 	graph := model.GetGraph()
-	nodes := graph.GetNode()
 
-	pp.Println(graph.GetName())
+	pp.Println(graph)
 
 	// assert.Equal(t, "Conv", nodes[0].GetOpType())
 	// assert.Equal(t, "Relu", nodes[1].GetOpType())
 
-	assert.Equal(t, int64(3), model.GetIrVersion())
-	assert.Equal(t, "CNsTK", model.GetProducerName())
-	assert.Equal(t, "Constant", nodes[0].GetOpType())
-	assert.Equal(t, "Div", nodes[1].GetOpType())
+	// assert.Equal(t, int64(3), model.GetIrVersion())
+	// assert.Equal(t, "CNTK", model.GetProducerName())
+	// assert.Equal(t, "Constant", nodes[0].GetOpType())
+	// assert.Equal(t, "Div", nodes[1].GetOpType())
 }
 
 // TestUnmarshalModel ...
@@ -43,13 +41,14 @@ func XXXTestUnmarshalModel(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 
-	// graph := model.GetGraph()
-	// nodes := graph.GetNode()
+	graph := model.GetGraph()
+	nodes := graph.GetNode()
 
+	pp.Println(len(nodes))
 	// pp.Println(graph.GetName())
 
-	// assert.Equal(t, int64(3), model.GetIrVersion())
-	// assert.Equal(t, "CNTK", model.GetProducerName())
-	// assert.Equal(t, "Constant", nodes[0].GetOpType())
-	// assert.Equal(t, "Div", nodes[1].GetOpType())
+	assert.Equal(t, int64(3), model.GetIrVersion())
+	assert.Equal(t, "CNTK", model.GetProducerName())
+	assert.Equal(t, "Constant", nodes[0].GetOpType())
+	assert.Equal(t, "Div", nodes[1].GetOpType())
 }
