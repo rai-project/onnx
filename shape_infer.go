@@ -28,10 +28,12 @@ func ReadModelShapeInfer(protoFileName string) (*ModelProto, error) {
 		return nil, errors.Wrapf(err, "failed to open %s", protoFileName)
 	}
 
-	// pp.Println("aaa string(buf) is", len(string(buf)))
+	pp.Println("aaa string(buf) is", len(string(buf)))
 
 	// protoContent := C.CString(string(buf))
 	// defer C.free(unsafe.Pointer(protoContent))
+
+	// pp.Println("protoContent in go is", C.int(C.strlen(protoContent)))
 
 	// sharedProtoContentC := C.go_shape_inference(protoContent)
 	// if sharedProtoContentC == nil {
@@ -48,15 +50,21 @@ func ReadModelShapeInfer(protoFileName string) (*ModelProto, error) {
 	protoContent := C.CBytes(buf)
 	defer C.free(unsafe.Pointer(protoContent))
 
-	shapedProtoContentC := C.go_shape_inference((*C.char)(protoContent))
-	if shapedProtoContentC == nil {
+	//pp.Println("protoContent in go is", C.int(C.strlen((*C.char)(protoContent))))
+
+	pp.Println("protoContent in go is", len(buf))
+
+	shapedProtoContentC := C.go_shape_inference((*C.char)(protoContent), C.size_t(len(buf)))
+	if shapedProtoContentC.buf == nil {
 		return nil, errors.Wrapf(err, "failed to shape infer %s", protoFileName)
 	}
-	defer C.free(unsafe.Pointer(shapedProtoContentC))
+	length := C.int(shapedProtoContentC.length)
+	sharedProtoContent := C.GoBytes(unsafe.Pointer(shapedProtoContentC.buf), length)
 
-	len := C.int(C.strlen(shapedProtoContentC))
-	pp.Println("len in go is", len)
-	sharedProtoContent := C.GoBytes(unsafe.Pointer(shapedProtoContentC), len)
+	defer C.free(unsafe.Pointer(shapedProtoContentC.buf))
+
+	//sharedProtoContent := []byte(C.GoString(shapedProtoContentC))
+	pp.Println("len in go is", len(sharedProtoContent))
 
 	model := new(ModelProto)
 	err = proto.Unmarshal(sharedProtoContent, model)
