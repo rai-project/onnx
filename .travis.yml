@@ -26,7 +26,7 @@ install:
   - cd onnx
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DONNX_ML=ON -DONNX_NAMESPACE=onnx 
   - make 
   - cd $TRAVIS_BUILD_DIR
   - make travis
