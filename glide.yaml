@@ -1,0 +1,16 @@
+package: github.com/rai-project/onnx
+import:
+- package: github.com/Unknwon/com
+- package: github.com/gogo/protobuf
+  subpackages:
+  - proto
+- package: github.com/golang/protobuf
+  subpackages:
+  - jsonpb
+- package: github.com/k0kubun/pp
+- package: github.com/pkg/errors
+testImport:
+- package: github.com/GeertJohan/go-sourcepath
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
