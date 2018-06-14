@@ -17,15 +17,17 @@ addons:
     - glide
     - build-essential
     - jq
+before_install:
+  - wget https://github.com/google/protobuf/releases/download/v$PROTOBUF_VER/protoc-$PROTOBUF_VER-linux-x86_64.zip
+  - unzip protoc-$PROTOBUF_VER-linux-x86_64.zip -d $HOME/protobuf/
 install:
-  - pushd
   - cd onnx
   - mkdir build
   - cd build
   - cmake ..
   - make 
   - make install
-  - popd
+  - cd $TRAVIS_BUILD_DIR
   - make travis
 script:
   - echo "Skip tests..."
@@ -34,5 +36,5 @@ after_script:
 
 env:
   global:
-  - PROTOBUF_VER="3.3.0"
+  - PROTOBUF_VER="3.5.1"
   - PATH=$HOME/protobuf/bin:$PATH
