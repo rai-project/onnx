@@ -19,9 +19,10 @@ addons:
     - glide
     - build-essential
     - jq
-before_install:
-  - wget https://github.com/google/protobuf/releases/download/v$PROTOBUF_VER/protoc-$PROTOBUF_VER-linux-x86_64.zip
-  - unzip protoc-$PROTOBUF_VER-linux-x86_64.zip -d $HOME/protobuf/
+    - libprotobuf-c0
+    - libprotobuf-c0-dev
+    - protobuf-c-compiler
+    - libprotobuf-dev
 install:
   - cd onnx
   - mkdir build
@@ -35,8 +36,3 @@ script:
   - echo "Skip tests..."
 after_script:
   - go test -race -v $(glide novendor)
-
-env:
-  global:
-  - PROTOBUF_VER="3.5.1"
-  - PATH=$HOME/protobuf/bin:$PATH
