@@ -24,7 +24,7 @@ clean-proto:
 
 clean: clean-proto
 
-travis: install-deps glide-install logrus-fix generate shared
+travis: install-deps glide-install logrus-fix shared
 	echo "building..."
 	go build
 
