@@ -18,9 +18,6 @@ generate: clean generate-models
 
 generate-proto:
 	protoc --gogofaster_out=. -Iproto -I$(GOPATH)/src proto/onnx.proto3 
-	
-generate-models:
-	go-bindata -nomemcopy -prefix builtin_models/ -pkg onnx -o builtin_models_static.go -ignore=.DS_Store  -ignore=README.md builtin_models/...
 
 clean-models:
 	rm -fr builtin_models_static.go
@@ -33,3 +30,8 @@ clean: clean-models
 travis: install-deps glide-install logrus-fix generate
 	echo "building..."
 	go build
+
+shared:
+	mkdir -p build
+	go build -buildmode=c-shared -o build/onnx_go.so main.go
+	# go build -buildmode=c-archive -o build/onnx_go.a main.go

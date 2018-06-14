@@ -23,6 +23,7 @@ func unmarshal(target proto.Message, protoFileName string) error {
 	return proto.Unmarshal(buf, target)
 }
 
+//export ReadModel
 func ReadModel(protoFileName string) (*ModelProto, error) {
 	model := new(ModelProto)
 	err := unmarshal(model, protoFileName)
