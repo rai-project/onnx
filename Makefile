@@ -14,18 +14,15 @@ logrus-fix:
 	rm -fr vendor/github.com/Sirupsen
 	find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
 
-generate: clean generate-models
+generate: clean generate-proto
 
 generate-proto:
 	protoc --gogofaster_out=. -Iproto -I$(GOPATH)/src proto/onnx.proto3 
 
-clean-models:
-	rm -fr builtin_models_static.go
-
 clean-proto:
 	rm -fr *pb.go
 
-clean: clean-models
+clean: clean-proto
 
 travis: install-deps glide-install logrus-fix generate shared
 	echo "building..."
