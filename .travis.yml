@@ -17,7 +17,6 @@ addons:
     - glide
     - build-essential
     - jq
-    - protobuf
     - libprotobuf-c0
     - libprotobuf-c0-dev
     - protobuf-c-compiler
