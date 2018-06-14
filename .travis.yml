@@ -12,10 +12,12 @@ addons:
     sources:
     - sourceline: ppa:masterminds/glide
     - sourceline: ppa:ubuntu-toolchain-r/test
+    - sourceline: ppa:maarten-fonville/protobuf
     packages:
     - glide
     - build-essential
     - jq
+    - protobuf
     - libprotobuf-c0
     - libprotobuf-c0-dev
     - protobuf-c-compiler
