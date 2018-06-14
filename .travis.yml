@@ -23,6 +23,7 @@ addons:
     - libprotobuf-c0-dev
     - protobuf-c-compiler
     - libprotobuf-dev
+    - protobuf-compiler
 install:
   - cd onnx
   - mkdir build
