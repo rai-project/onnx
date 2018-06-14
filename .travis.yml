@@ -27,7 +27,6 @@ install:
   - cd build
   - cmake ..
   - make 
-  - make install
   - cd $TRAVIS_BUILD_DIR
   - make travis
 script:
