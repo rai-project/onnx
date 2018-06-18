@@ -24,7 +24,7 @@ addons:
     - protobuf-compiler
 install:
   - cd onnx
-  - protoc --cpp_out=. -Iproto -Ionnx onnx.proto
+  - protoc --cpp_out=. -Iproto -Ionnx onnx.proto onnx-ml.proto onnx-operators-ml.proto onnx-operators.proto
   - mkdir build
   - cd build
   - cmake .. -DONNX_ML=ON -DONNX_NAMESPACE=onnx 
