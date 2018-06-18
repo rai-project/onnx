@@ -13,14 +13,6 @@
 #include "onnx/shape_inference/implementation.h"
 
 go_string go_shape_inference(char *bytes, size_t len) {
-  // using namespace ONNX_NAMESPACE;
-  // unsigned int len = strlen(bytes);
-  // ModelProto proto{};
-  // ParseProtoFromBytes(&proto, bytes, len);
-  // shape_inference::InferShapes(proto);
-  // char *out = new char[len];
-  // proto.SerializeToArray(out, len);
-  // return out;
   using namespace ONNX_NAMESPACE;
   ModelProto proto{};
   ParseProtoFromBytes(&proto, bytes, len);
@@ -28,18 +20,17 @@ go_string go_shape_inference(char *bytes, size_t len) {
   // std::cout << "version  = " << proto.ir_version() << "\n";
   // std::cout << "name  = " << proto.graph().name() << "\n";
   shape_inference::InferShapes(proto);
-  for (auto info : proto.graph().value_info()) {
-    std::cout << "shape = " << info.name() << "\n";
-  }
+  // for (auto info : proto.graph().value_info()) {
+  //   std::cout << "shape = " << info.name() << "\n";
+  // }
   std::string out;
   proto.SerializeToString(&out);
-  std::cout << "strlen(bytes) = " << out.size() << "\n";
-  char *buf = (char *) malloc((out.size() + 1) * sizeof(char));
+  char *buf = (char *)malloc((out.size() + 1) * sizeof(char));
   memcpy(buf, out.c_str(), out.size());
   buf[out.size()] = '\0';
 
   go_string res;
   res.length = out.size();
-  res.buf    = buf;
+  res.buf = buf;
   return res;
 }
