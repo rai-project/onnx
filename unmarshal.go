@@ -5,7 +5,6 @@ import (
 
 	"github.com/Unknwon/com"
 	"github.com/gogo/protobuf/proto"
-	"github.com/k0kubun/pp"
 	"github.com/pkg/errors"
 )
 
@@ -17,8 +16,6 @@ func unmarshal(target proto.Message, protoFileName string) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to open %s", protoFileName)
 	}
-
-	pp.Println("string(buf) is", len(string(buf)))
 
 	return proto.Unmarshal(buf, target)
 }
