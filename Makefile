@@ -17,7 +17,7 @@ logrus-fix:
 generate: clean generate-proto
 
 generate-proto:
-	protoc --gogofaster_out=. -Iproto -I$(GOPATH)/src proto/onnx.proto3 
+	protoc --gogofaster_out=. -Iproto onnx.proto3 
 
 clean-proto:
 	rm -fr *pb.go
