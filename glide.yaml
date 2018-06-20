@@ -2,6 +2,7 @@ package: github.com/rai-project/onnx
 import:
 - package: github.com/Unknwon/com
 - package: github.com/gogo/protobuf
+  version: ^1.0.0
   subpackages:
   - proto
 - package: github.com/golang/protobuf
