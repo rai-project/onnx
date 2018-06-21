@@ -10,6 +10,9 @@ install-deps:
 glide-install:
 	glide install --force
 
+dep-ensure:
+	dep ensure
+
 logrus-fix:
 	rm -fr vendor/github.com/Sirupsen
 	find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
@@ -24,7 +27,7 @@ clean-proto:
 
 clean: clean-proto
 
-travis: install-deps glide-install logrus-fix shared
+travis: install-deps dep-ensure logrus-fix shared
 	echo "building..."
 	go build
 
