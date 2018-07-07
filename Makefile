@@ -11,7 +11,7 @@ glide-install:
 	glide install --force
 
 dep-ensure:
-	dep ensure
+	dep ensure -v
 
 logrus-fix:
 	rm -fr vendor/github.com/Sirupsen
