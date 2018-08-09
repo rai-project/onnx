@@ -68,7 +68,7 @@ func (x Version) String() string {
 	return proto.EnumName(Version_name, int32(x))
 }
 func (Version) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{0}
 }
 
 // Note: this enum is structurally identical to the OpSchema::AttrType
@@ -120,7 +120,7 @@ func (x AttributeProto_AttributeType) String() string {
 	return proto.EnumName(AttributeProto_AttributeType_name, int32(x))
 }
 func (AttributeProto_AttributeType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{0, 0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{0, 0}
 }
 
 type TensorProto_DataType int32
@@ -187,7 +187,7 @@ func (x TensorProto_DataType) String() string {
 	return proto.EnumName(TensorProto_DataType_name, int32(x))
 }
 func (TensorProto_DataType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{6, 0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{6, 0}
 }
 
 // Attributes
@@ -232,7 +232,7 @@ func (m *AttributeProto) Reset()         { *m = AttributeProto{} }
 func (m *AttributeProto) String() string { return proto.CompactTextString(m) }
 func (*AttributeProto) ProtoMessage()    {}
 func (*AttributeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{0}
 }
 func (m *AttributeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -376,7 +376,7 @@ func (m *ValueInfoProto) Reset()         { *m = ValueInfoProto{} }
 func (m *ValueInfoProto) String() string { return proto.CompactTextString(m) }
 func (*ValueInfoProto) ProtoMessage()    {}
 func (*ValueInfoProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{1}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{1}
 }
 func (m *ValueInfoProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -455,7 +455,7 @@ func (m *NodeProto) Reset()         { *m = NodeProto{} }
 func (m *NodeProto) String() string { return proto.CompactTextString(m) }
 func (*NodeProto) ProtoMessage()    {}
 func (*NodeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{2}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{2}
 }
 func (m *NodeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -583,7 +583,7 @@ func (m *ModelProto) Reset()         { *m = ModelProto{} }
 func (m *ModelProto) String() string { return proto.CompactTextString(m) }
 func (*ModelProto) ProtoMessage()    {}
 func (*ModelProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{3}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{3}
 }
 func (m *ModelProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -688,7 +688,7 @@ func (m *StringStringEntryProto) Reset()         { *m = StringStringEntryProto{}
 func (m *StringStringEntryProto) String() string { return proto.CompactTextString(m) }
 func (*StringStringEntryProto) ProtoMessage()    {}
 func (*StringStringEntryProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{4}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{4}
 }
 func (m *StringStringEntryProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -762,7 +762,7 @@ func (m *GraphProto) Reset()         { *m = GraphProto{} }
 func (m *GraphProto) String() string { return proto.CompactTextString(m) }
 func (*GraphProto) ProtoMessage()    {}
 func (*GraphProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{5}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{5}
 }
 func (m *GraphProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -912,7 +912,7 @@ func (m *TensorProto) Reset()         { *m = TensorProto{} }
 func (m *TensorProto) String() string { return proto.CompactTextString(m) }
 func (*TensorProto) ProtoMessage()    {}
 func (*TensorProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{6}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{6}
 }
 func (m *TensorProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1039,7 +1039,7 @@ func (m *TensorProto_Segment) Reset()         { *m = TensorProto_Segment{} }
 func (m *TensorProto_Segment) String() string { return proto.CompactTextString(m) }
 func (*TensorProto_Segment) ProtoMessage()    {}
 func (*TensorProto_Segment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{6, 0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{6, 0}
 }
 func (m *TensorProto_Segment) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1095,7 +1095,7 @@ func (m *TensorShapeProto) Reset()         { *m = TensorShapeProto{} }
 func (m *TensorShapeProto) String() string { return proto.CompactTextString(m) }
 func (*TensorShapeProto) ProtoMessage()    {}
 func (*TensorShapeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{7}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{7}
 }
 func (m *TensorShapeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1150,7 +1150,7 @@ func (m *TensorShapeProto_Dimension) Reset()         { *m = TensorShapeProto_Dim
 func (m *TensorShapeProto_Dimension) String() string { return proto.CompactTextString(m) }
 func (*TensorShapeProto_Dimension) ProtoMessage()    {}
 func (*TensorShapeProto_Dimension) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{7, 0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{7, 0}
 }
 func (m *TensorShapeProto_Dimension) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1308,7 +1308,7 @@ func (m *TypeProto) Reset()         { *m = TypeProto{} }
 func (m *TypeProto) String() string { return proto.CompactTextString(m) }
 func (*TypeProto) ProtoMessage()    {}
 func (*TypeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{8}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{8}
 }
 func (m *TypeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1438,7 +1438,7 @@ func (m *TypeProto_Tensor) Reset()         { *m = TypeProto_Tensor{} }
 func (m *TypeProto_Tensor) String() string { return proto.CompactTextString(m) }
 func (*TypeProto_Tensor) ProtoMessage()    {}
 func (*TypeProto_Tensor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{8, 0}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{8, 0}
 }
 func (m *TypeProto_Tensor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1501,7 +1501,7 @@ func (m *OperatorSetIdProto) Reset()         { *m = OperatorSetIdProto{} }
 func (m *OperatorSetIdProto) String() string { return proto.CompactTextString(m) }
 func (*OperatorSetIdProto) ProtoMessage()    {}
 func (*OperatorSetIdProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_0a3a764319521af3, []int{9}
+	return fileDescriptor_onnx_9167e5a4623a2e30, []int{9}
 }
 func (m *OperatorSetIdProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -5637,9 +5637,9 @@ var (
 	ErrIntOverflowOnnx3   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() { proto.RegisterFile("onnx.proto3", fileDescriptor_onnx_0a3a764319521af3) }
+func init() { proto.RegisterFile("onnx.proto3", fileDescriptor_onnx_9167e5a4623a2e30) }
 
-var fileDescriptor_onnx_0a3a764319521af3 = []byte{
+var fileDescriptor_onnx_9167e5a4623a2e30 = []byte{
 	// 1353 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x56, 0xcd, 0x6e, 0xdb, 0xc6,
 	0x16, 0xf6, 0x88, 0x92, 0x28, 0x1e, 0x4a, 0xca, 0xdc, 0x41, 0xe2, 0xcb, 0x18, 0x37, 0x8e, 0xae,
