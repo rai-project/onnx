@@ -41,6 +41,11 @@ func ReadModelShapeInfer(protoFileName string) (*ModelProto, error) {
 
 	model := new(ModelProto)
 	err = proto.Unmarshal(sharedProtoContent, model)
+	if err != nil {
+		return nil, err
+	}
 
-	return model, err
+	model.Fix()
+
+	return model, nil
 }

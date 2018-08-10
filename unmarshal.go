@@ -25,5 +25,11 @@ func ReadModel(protoFileName string) (*ModelProto, error) {
 	model := new(ModelProto)
 	err := unmarshal(model, protoFileName)
 
-	return model, err
+	if err != nil {
+		return nil, err
+	}
+
+	model.Fix()
+
+	return model, nil
 }
