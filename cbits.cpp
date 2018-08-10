@@ -3,6 +3,7 @@
 #include <limits>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 #include <unordered_map>
 
 #include "cbits.hpp"
@@ -34,3 +35,27 @@ go_string go_shape_inference(char *bytes, size_t len) {
   res.buf = buf;
   return res;
 }
+
+go_string go_optimize(char *bytes, size_t len, char **optnames, int numopts) {
+  using namespace ONNX_NAMESPACE;
+  ModelProto proto{};
+  ParseProtoFromBytes(&proto, bytes, len);
+  std::vector<std::string> names(numopts);
+  for (int ii =0; ii < numopts; ii++) {
+    names.push_back(std::string(optnames[ii]));
+  }
+  auto const result = optimization::Optimize(std::move(proto), names);
+  std::string out;
+  proto.SerializeToString(&out);
+  char *buf = (char *)malloc((out.size() + 1) * sizeof(char));
+  memcpy(buf, out.c_str(), out.size());
+  buf[out.size()] = '\0';
+
+  go_string res;
+  res.length = out.size();
+  res.buf = buf;
+  return res;
+}
+
+
+
