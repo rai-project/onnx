@@ -690,3 +690,5 @@ paket-files/
 
 main
 .vscode
+
+*inferred.onnx
