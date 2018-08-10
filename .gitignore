@@ -689,6 +689,10 @@ paket-files/
 
 
 main
+<<<<<<< HEAD
 .vscode
 
 *inferred.onnx
+=======
+.vscode
+>>>>>>> 05b64e8b52129defb03db8005900424bb19bd61e
