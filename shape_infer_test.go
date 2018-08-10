@@ -9,7 +9,12 @@ import (
 	"github.com/k0kubun/pp"
 
 	sourcepath "github.com/GeertJohan/go-sourcepath"
+	home "github.com/mitchellh/go-homedir"
 	"github.com/stretchr/testify/assert"
+)
+
+var (
+	homedir, _ = home.Dir()
 )
 
 // TestModelShapeInfer ...
@@ -18,6 +23,7 @@ func TestModelShapeInfer(t *testing.T) {
 	//onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
 
 	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
+	// onnxModelFile = filepath.Join(homedir, "onnx_models", "bvlc_alexnet", "model.onnx")
 
 	model, err := ReadModelShapeInfer(onnxModelFile)
 	assert.NoError(t, err)
