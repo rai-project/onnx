@@ -17,7 +17,24 @@ import (
 	"github.com/pkg/errors"
 )
 
+var (
+	OptimizationNames = []string{
+		"nop",
+		"eliminate_identity",
+		"eliminate_nop_transpose",
+		"eliminate_unused_initializer",
+		"fuse_consecutive_squeezes",
+		"fuse_consecutive_transposes",
+		"fuse_add_bias_into_conv",
+		"fuse_transpose_into_gemm",
+	}
+)
+
 func OptmizeModel(protoFileName string, optimizationNames []string) (*ModelProto, error) {
+
+	if len(optimizationNames) == 0 {
+		optimizationNames = OptimizationNames
+	}
 
 	if !com.IsFile(protoFileName) {
 		return nil, errors.Errorf("%s is not a file", protoFileName)
