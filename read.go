@@ -63,13 +63,5 @@ func New(protoFileNameOrg string, opts ...Option) (*ModelProto, error) {
 	if model != nil {
 		return model, nil
 	}
-
-	model = new(ModelProto)
-	err = unmarshal(model, protoFileName)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return model, nil
+	return ReadModel(protoFileName)
 }

@@ -31,6 +31,18 @@ type Options struct {
 // Option ...
 type Option func(*Options)
 
+func Optimizations(optimizationNames []string) Option {
+	return func(opts *Options) {
+		opts.Optimizations = optimizationNames
+	}
+}
+
+func Steps(steps []string) Option {
+	return func(opts *Options) {
+		opts.Steps = steps
+	}
+}
+
 func NewOptions(opts ...Option) *Options {
 	options := &Options{
 		Context:       context.Background(),
