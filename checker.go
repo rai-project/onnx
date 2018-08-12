@@ -17,11 +17,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func OptmizeModel(protoFileName string, optimizationNames []string) (*ModelProto, error) {
-
-	if len(optimizationNames) == 0 {
-		optimizationNames = DefaultOptimizationNames
-	}
+func CheckModel(protoFileName string) (*ModelProto, error) {
 
 	if !com.IsFile(protoFileName) {
 		return nil, errors.Errorf("%s is not a file", protoFileName)
@@ -34,15 +30,9 @@ func OptmizeModel(protoFileName string, optimizationNames []string) (*ModelProto
 	protoContent := C.CBytes(buf)
 	defer C.free(unsafe.Pointer(protoContent))
 
-	cargs := C.makeCharArray(C.int(len(optimizationNames)))
-	defer C.freeCharArray(cargs, C.int(len(optimizationNames)))
-	for i, s := range optimizationNames {
-		C.setArrayString(cargs, C.CString(s), C.int(i))
-	}
-
-	shapedProtoContentC := C.go_optimize((*C.char)(protoContent), C.size_t(len(buf)), cargs, C.int(len(optimizationNames)))
+	shapedProtoContentC := C.go_check_model((*C.char)(protoContent), C.size_t(len(buf)))
 	if shapedProtoContentC.buf == nil {
-		return nil, errors.Wrapf(err, "failed to optimize model %s", protoFileName)
+		return nil, errors.Wrapf(err, "failed to check model %s", protoFileName)
 	}
 	length := C.int(shapedProtoContentC.length)
 	sharedProtoContent := C.GoBytes(unsafe.Pointer(shapedProtoContentC.buf), length)

@@ -36,6 +36,24 @@ go_string go_shape_inference(char *bytes, size_t len) {
   return res;
 }
 
+
+go_string go_check_model(char *bytes, size_t len) {
+  using namespace ONNX_NAMESPACE;
+  ModelProto proto{};
+  ParseProtoFromBytes(&proto, bytes, len);
+  checker::check_model(proto);
+  std::string out;
+  proto.SerializeToString(&out);
+  char *buf = (char *)malloc((out.size() + 1) * sizeof(char));
+  memcpy(buf, out.c_str(), out.size());
+  buf[out.size()] = '\0';
+
+  go_string res;
+  res.length = out.size();
+  res.buf = buf;
+  return res;
+}
+
 go_string go_optimize(char *bytes, size_t len, char **optnames, int numopts) {
   using namespace ONNX_NAMESPACE;
   ModelProto proto{};

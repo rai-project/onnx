@@ -15,6 +15,8 @@ typedef struct {
 
 go_string go_shape_inference(char *bytes, size_t len);
 
+go_string go_check_model(char *bytes, size_t len);
+
 go_string go_optimize(char *bytes, size_t len, char **optnames, int numopts);
 
 static char **makeCharArray(int size) { return (char **) calloc(sizeof(char *), size); }
