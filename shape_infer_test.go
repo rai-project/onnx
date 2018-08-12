@@ -25,7 +25,7 @@ func TestModelShapeInfer(t *testing.T) {
 	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
 	// onnxModelFile = filepath.Join(homedir, "onnx_models", "bvlc_alexnet", "model.onnx")
 
-	model, err := ReadModelShapeInfer(onnxModelFile)
+	model, err := New(onnxModelFile)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 

@@ -58,8 +58,9 @@ go_string go_optimize(char *bytes, size_t len, char **optnames, int numopts) {
   using namespace ONNX_NAMESPACE;
   ModelProto proto{};
   ParseProtoFromBytes(&proto, bytes, len);
-  std::vector<std::string> names(numopts);
+  std::vector<std::string> names{};
   for (int ii =0; ii < numopts; ii++) {
+    // std::cout << "optimization = " << std::string(optnames[ii]) << "\n";
     names.push_back(std::string(optnames[ii]));
   }
   auto const result = optimization::Optimize(std::move(proto), names);
