@@ -26,12 +26,12 @@
   version = "v1.1.0"
 
 [[projects]]
-  digest = "1:9a688317f3231e0175b3429033f44411906c0ce119361b7b5019d01375f8cff7"
+  digest = "1:bbadccf3d3317ea03c0dac0b45b673b4b397c8f91a1d2eff550a3c51c4ad770e"
   name = "github.com/gogo/protobuf"
   packages = ["proto"]
   pruneopts = "UT"
-  revision = "1adfc126b41513cc696b209667c8656ea7aac67c"
-  version = "v1.0.0"
+  revision = "636bf0302bc95575d69441b25a2603156ffdddf1"
+  version = "v1.1.1"
 
 [[projects]]
   digest = "1:7e84d43e13c40dd0e5982be013881b5ced48550237cfb35e12e0579d31f6276a"
@@ -70,6 +70,14 @@
   version = "v0.0.3"
 
 [[projects]]
+  branch = "master"
+  digest = "1:c7354463195544b1ab3c1f1fadb41430947f5d28dfbf2cdbd38268c5717a5a03"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "58046073cbffe2f25d425fe1331102f55cf719de"
+
+[[projects]]
   digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -95,11 +103,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:38838aa959fb66911fa66b3409d70a8dc17b45326259f3c792496d5ee2fdbef8"
+  digest = "1:0316a8ad208917f1d141b077e278980fd5e4594f3a85f835dacbf24d85798252"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "ad87a3a340fa7f3bed189293fbfa7a9b7e021ae1"
+  revision = "4e1fef5609515ec7a2cee7b5de30ba6d9b438cbf"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -110,6 +118,7 @@
     "github.com/gogo/protobuf/proto",
     "github.com/golang/protobuf/jsonpb",
     "github.com/k0kubun/pp",
+    "github.com/mitchellh/go-homedir",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
   ]
