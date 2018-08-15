@@ -26,10 +26,10 @@ before_install:
 - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 install:
   - cd onnx
-  - protoc --cpp_out=. -Ionnx onnx.proto onnx-operators.proto
+  # - protoc --cpp_out=. -Ionnx onnx.proto onnx-operators.proto
   - mkdir build
   - cd build
-  - cmake .. -DONNX_ML=ON -DONNX_NAMESPACE=onnx 
+  - cmake .. 
   - make 
   - cd $TRAVIS_BUILD_DIR
   - make travis
