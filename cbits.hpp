@@ -24,10 +24,11 @@ static char **makeCharArray(int size) { return (char **) calloc(sizeof(char *), 
 static void setArrayString(char **a, char *s, int n) { a[n] = s; }
 
 static void freeCharArray(char **a, int size) {
+  int ii;
   if (a == NULL) {
     return;
   }
-  for (int ii = 0; ii < size; ii++) {
+  for (ii = 0; ii < size; ii++) {
     if (a == NULL) {
       continue;
     }
