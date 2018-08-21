@@ -1,3 +1,4 @@
+#ifdef C_ONNX_BINDINGS
 
 #include <climits>
 #include <limits>
@@ -78,3 +79,4 @@ go_string go_optimize(char *bytes, size_t len, char **optnames, int numopts) {
 
 
 
+#endif // C_ONNX_BINDINGS
