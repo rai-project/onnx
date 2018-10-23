@@ -4,6 +4,6 @@
 //go:generate go get github.com/elazarl/go-bindata-assetfs/...
 //go:generate go get github.com/golang/protobuf/protoc-gen-go
 //go:generate go get github.com/gogo/protobuf/...
-//go:generate protoc --gogoslick_out=. -Iproto onnx.proto3
+//go:generate protoc --gogofaster_out=. -Iproto onnx.proto3
 
 package onnx
