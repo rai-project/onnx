@@ -7,6 +7,13 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import strconv "strconv"
+
+import bytes "bytes"
+
+import strings "strings"
+import reflect "reflect"
+
 import encoding_binary "encoding/binary"
 
 import io "io"
@@ -33,22 +40,22 @@ type Version int32
 const (
 	// proto3 requires the first enum value to be zero.
 	// We add this just to appease the compiler.
-	Version__START_VERSION Version = 0
+	_START_VERSION Version = 0
 	// The version field is always serialized and we will use it to store the
 	// version that the  graph is generated from. This helps us set up version
 	// control.
 	// For the IR, we are using simple numbers starting with with 0x00000001,
 	// which was the version we published on Oct 10, 2017.
-	Version_IR_VERSION_2017_10_10 Version = 1
+	IR_VERSION_2017_10_10 Version = 1
 	// IR_VERSION 2 published on Oct 30, 2017
 	// - Added type discriminator to AttributeProto to support proto3 users
-	Version_IR_VERSION_2017_10_30 Version = 2
+	IR_VERSION_2017_10_30 Version = 2
 	// IR VERSION 3 published on Nov 3, 2017
 	// - For operator versioning:
 	//    - Added new message OperatorSetIdProto
 	//    - Added opset_import in ModelProto
 	// - For vendor extensions, added domain in NodeProto
-	Version_IR_VERSION Version = 3
+	IR_VERSION Version = 3
 )
 
 var Version_name = map[int32]string{
@@ -64,11 +71,8 @@ var Version_value = map[string]int32{
 	"IR_VERSION":            3,
 }
 
-func (x Version) String() string {
-	return proto.EnumName(Version_name, int32(x))
-}
 func (Version) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{0}
 }
 
 // Note: this enum is structurally identical to the OpSchema::AttrType
@@ -76,17 +80,17 @@ func (Version) EnumDescriptor() ([]byte, []int) {
 type AttributeProto_AttributeType int32
 
 const (
-	AttributeProto_UNDEFINED AttributeProto_AttributeType = 0
-	AttributeProto_FLOAT     AttributeProto_AttributeType = 1
-	AttributeProto_INT       AttributeProto_AttributeType = 2
-	AttributeProto_STRING    AttributeProto_AttributeType = 3
-	AttributeProto_TENSOR    AttributeProto_AttributeType = 4
-	AttributeProto_GRAPH     AttributeProto_AttributeType = 5
-	AttributeProto_FLOATS    AttributeProto_AttributeType = 6
-	AttributeProto_INTS      AttributeProto_AttributeType = 7
-	AttributeProto_STRINGS   AttributeProto_AttributeType = 8
-	AttributeProto_TENSORS   AttributeProto_AttributeType = 9
-	AttributeProto_GRAPHS    AttributeProto_AttributeType = 10
+	UNDEFINED AttributeProto_AttributeType = 0
+	FLOAT     AttributeProto_AttributeType = 1
+	INT       AttributeProto_AttributeType = 2
+	STRING    AttributeProto_AttributeType = 3
+	TENSOR    AttributeProto_AttributeType = 4
+	GRAPH     AttributeProto_AttributeType = 5
+	FLOATS    AttributeProto_AttributeType = 6
+	INTS      AttributeProto_AttributeType = 7
+	STRINGS   AttributeProto_AttributeType = 8
+	TENSORS   AttributeProto_AttributeType = 9
+	GRAPHS    AttributeProto_AttributeType = 10
 )
 
 var AttributeProto_AttributeType_name = map[int32]string{
@@ -116,39 +120,36 @@ var AttributeProto_AttributeType_value = map[string]int32{
 	"GRAPHS":    10,
 }
 
-func (x AttributeProto_AttributeType) String() string {
-	return proto.EnumName(AttributeProto_AttributeType_name, int32(x))
-}
 func (AttributeProto_AttributeType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{0, 0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{0, 0}
 }
 
 type TensorProto_DataType int32
 
 const (
-	TensorProto_UNDEFINED TensorProto_DataType = 0
+	UNDEFINED TensorProto_DataType = 0
 	// Basic types.
-	TensorProto_FLOAT  TensorProto_DataType = 1
-	TensorProto_UINT8  TensorProto_DataType = 2
-	TensorProto_INT8   TensorProto_DataType = 3
-	TensorProto_UINT16 TensorProto_DataType = 4
-	TensorProto_INT16  TensorProto_DataType = 5
-	TensorProto_INT32  TensorProto_DataType = 6
-	TensorProto_INT64  TensorProto_DataType = 7
-	TensorProto_STRING TensorProto_DataType = 8
-	TensorProto_BOOL   TensorProto_DataType = 9
+	FLOAT  TensorProto_DataType = 1
+	UINT8  TensorProto_DataType = 2
+	INT8   TensorProto_DataType = 3
+	UINT16 TensorProto_DataType = 4
+	INT16  TensorProto_DataType = 5
+	INT32  TensorProto_DataType = 6
+	INT64  TensorProto_DataType = 7
+	STRING TensorProto_DataType = 8
+	BOOL   TensorProto_DataType = 9
 	// IEEE754 half-precision floating-point format (16 bits wide).
 	// This format has 1 sign bit, 5 exponent bits, and 10 mantissa bits.
-	TensorProto_FLOAT16    TensorProto_DataType = 10
-	TensorProto_DOUBLE     TensorProto_DataType = 11
-	TensorProto_UINT32     TensorProto_DataType = 12
-	TensorProto_UINT64     TensorProto_DataType = 13
-	TensorProto_COMPLEX64  TensorProto_DataType = 14
-	TensorProto_COMPLEX128 TensorProto_DataType = 15
+	FLOAT16    TensorProto_DataType = 10
+	DOUBLE     TensorProto_DataType = 11
+	UINT32     TensorProto_DataType = 12
+	UINT64     TensorProto_DataType = 13
+	COMPLEX64  TensorProto_DataType = 14
+	COMPLEX128 TensorProto_DataType = 15
 	// Non-IEEE floating-point format based on IEEE754 single-precision
 	// floating-point number truncated to 16 bits.
 	// This format has 1 sign bit, 8 exponent bits, and 7 mantissa bits.
-	TensorProto_BFLOAT16 TensorProto_DataType = 16
+	BFLOAT16 TensorProto_DataType = 16
 )
 
 var TensorProto_DataType_name = map[int32]string{
@@ -190,11 +191,8 @@ var TensorProto_DataType_value = map[string]int32{
 	"BFLOAT16":   16,
 }
 
-func (x TensorProto_DataType) String() string {
-	return proto.EnumName(TensorProto_DataType_name, int32(x))
-}
 func (TensorProto_DataType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{6, 0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{6, 0}
 }
 
 // Attributes
@@ -233,11 +231,10 @@ type AttributeProto struct {
 	Graphs  []*GraphProto  `protobuf:"bytes,11,rep,name=graphs" json:"graphs,omitempty"`
 }
 
-func (m *AttributeProto) Reset()         { *m = AttributeProto{} }
-func (m *AttributeProto) String() string { return proto.CompactTextString(m) }
-func (*AttributeProto) ProtoMessage()    {}
+func (m *AttributeProto) Reset()      { *m = AttributeProto{} }
+func (*AttributeProto) ProtoMessage() {}
 func (*AttributeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{0}
 }
 func (m *AttributeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -291,7 +288,7 @@ func (m *AttributeProto) GetType() AttributeProto_AttributeType {
 	if m != nil {
 		return m.Type
 	}
-	return AttributeProto_UNDEFINED
+	return UNDEFINED
 }
 
 func (m *AttributeProto) GetF() float32 {
@@ -375,11 +372,10 @@ type ValueInfoProto struct {
 	DocString string `protobuf:"bytes,3,opt,name=doc_string,json=docString,proto3" json:"doc_string,omitempty"`
 }
 
-func (m *ValueInfoProto) Reset()         { *m = ValueInfoProto{} }
-func (m *ValueInfoProto) String() string { return proto.CompactTextString(m) }
-func (*ValueInfoProto) ProtoMessage()    {}
+func (m *ValueInfoProto) Reset()      { *m = ValueInfoProto{} }
+func (*ValueInfoProto) ProtoMessage() {}
 func (*ValueInfoProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{1}
+	return fileDescriptor_onnx_6350588a922b672e, []int{1}
 }
 func (m *ValueInfoProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -452,11 +448,10 @@ type NodeProto struct {
 	DocString string `protobuf:"bytes,6,opt,name=doc_string,json=docString,proto3" json:"doc_string,omitempty"`
 }
 
-func (m *NodeProto) Reset()         { *m = NodeProto{} }
-func (m *NodeProto) String() string { return proto.CompactTextString(m) }
-func (*NodeProto) ProtoMessage()    {}
+func (m *NodeProto) Reset()      { *m = NodeProto{} }
+func (*NodeProto) ProtoMessage() {}
 func (*NodeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{2}
+	return fileDescriptor_onnx_6350588a922b672e, []int{2}
 }
 func (m *NodeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -578,11 +573,10 @@ type ModelProto struct {
 	MetadataProps []*StringStringEntryProto `protobuf:"bytes,14,rep,name=metadata_props,json=metadataProps" json:"metadata_props,omitempty"`
 }
 
-func (m *ModelProto) Reset()         { *m = ModelProto{} }
-func (m *ModelProto) String() string { return proto.CompactTextString(m) }
-func (*ModelProto) ProtoMessage()    {}
+func (m *ModelProto) Reset()      { *m = ModelProto{} }
+func (*ModelProto) ProtoMessage() {}
 func (*ModelProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{3}
+	return fileDescriptor_onnx_6350588a922b672e, []int{3}
 }
 func (m *ModelProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -681,11 +675,10 @@ type StringStringEntryProto struct {
 	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 }
 
-func (m *StringStringEntryProto) Reset()         { *m = StringStringEntryProto{} }
-func (m *StringStringEntryProto) String() string { return proto.CompactTextString(m) }
-func (*StringStringEntryProto) ProtoMessage()    {}
+func (m *StringStringEntryProto) Reset()      { *m = StringStringEntryProto{} }
+func (*StringStringEntryProto) ProtoMessage() {}
 func (*StringStringEntryProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{4}
+	return fileDescriptor_onnx_6350588a922b672e, []int{4}
 }
 func (m *StringStringEntryProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -753,11 +746,10 @@ type GraphProto struct {
 	ValueInfo []*ValueInfoProto `protobuf:"bytes,13,rep,name=value_info,json=valueInfo" json:"value_info,omitempty"`
 }
 
-func (m *GraphProto) Reset()         { *m = GraphProto{} }
-func (m *GraphProto) String() string { return proto.CompactTextString(m) }
-func (*GraphProto) ProtoMessage()    {}
+func (m *GraphProto) Reset()      { *m = GraphProto{} }
+func (*GraphProto) ProtoMessage() {}
 func (*GraphProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{5}
+	return fileDescriptor_onnx_6350588a922b672e, []int{5}
 }
 func (m *GraphProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -901,11 +893,10 @@ type TensorProto struct {
 	Uint64Data []uint64 `protobuf:"varint,11,rep,packed,name=uint64_data,json=uint64Data" json:"uint64_data,omitempty"`
 }
 
-func (m *TensorProto) Reset()         { *m = TensorProto{} }
-func (m *TensorProto) String() string { return proto.CompactTextString(m) }
-func (*TensorProto) ProtoMessage()    {}
+func (m *TensorProto) Reset()      { *m = TensorProto{} }
+func (*TensorProto) ProtoMessage() {}
 func (*TensorProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{6}
+	return fileDescriptor_onnx_6350588a922b672e, []int{6}
 }
 func (m *TensorProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -945,7 +936,7 @@ func (m *TensorProto) GetDataType() TensorProto_DataType {
 	if m != nil {
 		return m.DataType
 	}
-	return TensorProto_UNDEFINED
+	return UNDEFINED
 }
 
 func (m *TensorProto) GetSegment() *TensorProto_Segment {
@@ -1026,11 +1017,10 @@ type TensorProto_Segment struct {
 	End   int64 `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
 }
 
-func (m *TensorProto_Segment) Reset()         { *m = TensorProto_Segment{} }
-func (m *TensorProto_Segment) String() string { return proto.CompactTextString(m) }
-func (*TensorProto_Segment) ProtoMessage()    {}
+func (m *TensorProto_Segment) Reset()      { *m = TensorProto_Segment{} }
+func (*TensorProto_Segment) ProtoMessage() {}
 func (*TensorProto_Segment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{6, 0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{6, 0}
 }
 func (m *TensorProto_Segment) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1080,11 +1070,10 @@ type TensorShapeProto struct {
 	Dim []*TensorShapeProto_Dimension `protobuf:"bytes,1,rep,name=dim" json:"dim,omitempty"`
 }
 
-func (m *TensorShapeProto) Reset()         { *m = TensorShapeProto{} }
-func (m *TensorShapeProto) String() string { return proto.CompactTextString(m) }
-func (*TensorShapeProto) ProtoMessage()    {}
+func (m *TensorShapeProto) Reset()      { *m = TensorShapeProto{} }
+func (*TensorShapeProto) ProtoMessage() {}
 func (*TensorShapeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{7}
+	return fileDescriptor_onnx_6350588a922b672e, []int{7}
 }
 func (m *TensorShapeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1133,11 +1122,10 @@ type TensorShapeProto_Dimension struct {
 	Denotation string `protobuf:"bytes,3,opt,name=denotation,proto3" json:"denotation,omitempty"`
 }
 
-func (m *TensorShapeProto_Dimension) Reset()         { *m = TensorShapeProto_Dimension{} }
-func (m *TensorShapeProto_Dimension) String() string { return proto.CompactTextString(m) }
-func (*TensorShapeProto_Dimension) ProtoMessage()    {}
+func (m *TensorShapeProto_Dimension) Reset()      { *m = TensorShapeProto_Dimension{} }
+func (*TensorShapeProto_Dimension) ProtoMessage() {}
 func (*TensorShapeProto_Dimension) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{7, 0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{7, 0}
 }
 func (m *TensorShapeProto_Dimension) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1168,6 +1156,7 @@ var xxx_messageInfo_TensorShapeProto_Dimension proto.InternalMessageInfo
 
 type isTensorShapeProto_Dimension_Value interface {
 	isTensorShapeProto_Dimension_Value()
+	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
@@ -1289,11 +1278,10 @@ type TypeProto struct {
 	Denotation string `protobuf:"bytes,6,opt,name=denotation,proto3" json:"denotation,omitempty"`
 }
 
-func (m *TypeProto) Reset()         { *m = TypeProto{} }
-func (m *TypeProto) String() string { return proto.CompactTextString(m) }
-func (*TypeProto) ProtoMessage()    {}
+func (m *TypeProto) Reset()      { *m = TypeProto{} }
+func (*TypeProto) ProtoMessage() {}
 func (*TypeProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{8}
+	return fileDescriptor_onnx_6350588a922b672e, []int{8}
 }
 func (m *TypeProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1324,6 +1312,7 @@ var xxx_messageInfo_TypeProto proto.InternalMessageInfo
 
 type isTypeProto_Value interface {
 	isTypeProto_Value()
+	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
@@ -1417,11 +1406,10 @@ type TypeProto_Tensor struct {
 	Shape    *TensorShapeProto    `protobuf:"bytes,2,opt,name=shape" json:"shape,omitempty"`
 }
 
-func (m *TypeProto_Tensor) Reset()         { *m = TypeProto_Tensor{} }
-func (m *TypeProto_Tensor) String() string { return proto.CompactTextString(m) }
-func (*TypeProto_Tensor) ProtoMessage()    {}
+func (m *TypeProto_Tensor) Reset()      { *m = TypeProto_Tensor{} }
+func (*TypeProto_Tensor) ProtoMessage() {}
 func (*TypeProto_Tensor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{8, 0}
+	return fileDescriptor_onnx_6350588a922b672e, []int{8, 0}
 }
 func (m *TypeProto_Tensor) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1454,7 +1442,7 @@ func (m *TypeProto_Tensor) GetElemType() TensorProto_DataType {
 	if m != nil {
 		return m.ElemType
 	}
-	return TensorProto_UNDEFINED
+	return UNDEFINED
 }
 
 func (m *TypeProto_Tensor) GetShape() *TensorShapeProto {
@@ -1478,11 +1466,10 @@ type OperatorSetIdProto struct {
 	Version int64 `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 }
 
-func (m *OperatorSetIdProto) Reset()         { *m = OperatorSetIdProto{} }
-func (m *OperatorSetIdProto) String() string { return proto.CompactTextString(m) }
-func (*OperatorSetIdProto) ProtoMessage()    {}
+func (m *OperatorSetIdProto) Reset()      { *m = OperatorSetIdProto{} }
+func (*OperatorSetIdProto) ProtoMessage() {}
 func (*OperatorSetIdProto) Descriptor() ([]byte, []int) {
-	return fileDescriptor_onnx_5b7104ab7f4c2e49, []int{9}
+	return fileDescriptor_onnx_6350588a922b672e, []int{9}
 }
 func (m *OperatorSetIdProto) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1542,6 +1529,946 @@ func init() {
 	proto.RegisterEnum("onnx.Version", Version_name, Version_value)
 	proto.RegisterEnum("onnx.AttributeProto_AttributeType", AttributeProto_AttributeType_name, AttributeProto_AttributeType_value)
 	proto.RegisterEnum("onnx.TensorProto_DataType", TensorProto_DataType_name, TensorProto_DataType_value)
+}
+func (x Version) String() string {
+	s, ok := Version_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x AttributeProto_AttributeType) String() string {
+	s, ok := AttributeProto_AttributeType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x TensorProto_DataType) String() string {
+	s, ok := TensorProto_DataType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (this *AttributeProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AttributeProto)
+	if !ok {
+		that2, ok := that.(AttributeProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.RefAttrName != that1.RefAttrName {
+		return false
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.F != that1.F {
+		return false
+	}
+	if this.I != that1.I {
+		return false
+	}
+	if !bytes.Equal(this.S, that1.S) {
+		return false
+	}
+	if !this.T.Equal(that1.T) {
+		return false
+	}
+	if !this.G.Equal(that1.G) {
+		return false
+	}
+	if len(this.Floats) != len(that1.Floats) {
+		return false
+	}
+	for i := range this.Floats {
+		if this.Floats[i] != that1.Floats[i] {
+			return false
+		}
+	}
+	if len(this.Ints) != len(that1.Ints) {
+		return false
+	}
+	for i := range this.Ints {
+		if this.Ints[i] != that1.Ints[i] {
+			return false
+		}
+	}
+	if len(this.Strings) != len(that1.Strings) {
+		return false
+	}
+	for i := range this.Strings {
+		if !bytes.Equal(this.Strings[i], that1.Strings[i]) {
+			return false
+		}
+	}
+	if len(this.Tensors) != len(that1.Tensors) {
+		return false
+	}
+	for i := range this.Tensors {
+		if !this.Tensors[i].Equal(that1.Tensors[i]) {
+			return false
+		}
+	}
+	if len(this.Graphs) != len(that1.Graphs) {
+		return false
+	}
+	for i := range this.Graphs {
+		if !this.Graphs[i].Equal(that1.Graphs[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *ValueInfoProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ValueInfoProto)
+	if !ok {
+		that2, ok := that.(ValueInfoProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.Type.Equal(that1.Type) {
+		return false
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	return true
+}
+func (this *NodeProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NodeProto)
+	if !ok {
+		that2, ok := that.(NodeProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Input) != len(that1.Input) {
+		return false
+	}
+	for i := range this.Input {
+		if this.Input[i] != that1.Input[i] {
+			return false
+		}
+	}
+	if len(this.Output) != len(that1.Output) {
+		return false
+	}
+	for i := range this.Output {
+		if this.Output[i] != that1.Output[i] {
+			return false
+		}
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.OpType != that1.OpType {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	if len(this.Attribute) != len(that1.Attribute) {
+		return false
+	}
+	for i := range this.Attribute {
+		if !this.Attribute[i].Equal(that1.Attribute[i]) {
+			return false
+		}
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	return true
+}
+func (this *ModelProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ModelProto)
+	if !ok {
+		that2, ok := that.(ModelProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.IrVersion != that1.IrVersion {
+		return false
+	}
+	if len(this.OpsetImport) != len(that1.OpsetImport) {
+		return false
+	}
+	for i := range this.OpsetImport {
+		if !this.OpsetImport[i].Equal(that1.OpsetImport[i]) {
+			return false
+		}
+	}
+	if this.ProducerName != that1.ProducerName {
+		return false
+	}
+	if this.ProducerVersion != that1.ProducerVersion {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	if this.ModelVersion != that1.ModelVersion {
+		return false
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	if !this.Graph.Equal(that1.Graph) {
+		return false
+	}
+	if len(this.MetadataProps) != len(that1.MetadataProps) {
+		return false
+	}
+	for i := range this.MetadataProps {
+		if !this.MetadataProps[i].Equal(that1.MetadataProps[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *StringStringEntryProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StringStringEntryProto)
+	if !ok {
+		that2, ok := that.(StringStringEntryProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Key != that1.Key {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *GraphProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GraphProto)
+	if !ok {
+		that2, ok := that.(GraphProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Node) != len(that1.Node) {
+		return false
+	}
+	for i := range this.Node {
+		if !this.Node[i].Equal(that1.Node[i]) {
+			return false
+		}
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Initializer) != len(that1.Initializer) {
+		return false
+	}
+	for i := range this.Initializer {
+		if !this.Initializer[i].Equal(that1.Initializer[i]) {
+			return false
+		}
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	if len(this.Input) != len(that1.Input) {
+		return false
+	}
+	for i := range this.Input {
+		if !this.Input[i].Equal(that1.Input[i]) {
+			return false
+		}
+	}
+	if len(this.Output) != len(that1.Output) {
+		return false
+	}
+	for i := range this.Output {
+		if !this.Output[i].Equal(that1.Output[i]) {
+			return false
+		}
+	}
+	if len(this.ValueInfo) != len(that1.ValueInfo) {
+		return false
+	}
+	for i := range this.ValueInfo {
+		if !this.ValueInfo[i].Equal(that1.ValueInfo[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *TensorProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorProto)
+	if !ok {
+		that2, ok := that.(TensorProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Dims) != len(that1.Dims) {
+		return false
+	}
+	for i := range this.Dims {
+		if this.Dims[i] != that1.Dims[i] {
+			return false
+		}
+	}
+	if this.DataType != that1.DataType {
+		return false
+	}
+	if !this.Segment.Equal(that1.Segment) {
+		return false
+	}
+	if len(this.FloatData) != len(that1.FloatData) {
+		return false
+	}
+	for i := range this.FloatData {
+		if this.FloatData[i] != that1.FloatData[i] {
+			return false
+		}
+	}
+	if len(this.Int32Data) != len(that1.Int32Data) {
+		return false
+	}
+	for i := range this.Int32Data {
+		if this.Int32Data[i] != that1.Int32Data[i] {
+			return false
+		}
+	}
+	if len(this.StringData) != len(that1.StringData) {
+		return false
+	}
+	for i := range this.StringData {
+		if !bytes.Equal(this.StringData[i], that1.StringData[i]) {
+			return false
+		}
+	}
+	if len(this.Int64Data) != len(that1.Int64Data) {
+		return false
+	}
+	for i := range this.Int64Data {
+		if this.Int64Data[i] != that1.Int64Data[i] {
+			return false
+		}
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.DocString != that1.DocString {
+		return false
+	}
+	if !bytes.Equal(this.RawData, that1.RawData) {
+		return false
+	}
+	if len(this.DoubleData) != len(that1.DoubleData) {
+		return false
+	}
+	for i := range this.DoubleData {
+		if this.DoubleData[i] != that1.DoubleData[i] {
+			return false
+		}
+	}
+	if len(this.Uint64Data) != len(that1.Uint64Data) {
+		return false
+	}
+	for i := range this.Uint64Data {
+		if this.Uint64Data[i] != that1.Uint64Data[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *TensorProto_Segment) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorProto_Segment)
+	if !ok {
+		that2, ok := that.(TensorProto_Segment)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Begin != that1.Begin {
+		return false
+	}
+	if this.End != that1.End {
+		return false
+	}
+	return true
+}
+func (this *TensorShapeProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorShapeProto)
+	if !ok {
+		that2, ok := that.(TensorShapeProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Dim) != len(that1.Dim) {
+		return false
+	}
+	for i := range this.Dim {
+		if !this.Dim[i].Equal(that1.Dim[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *TensorShapeProto_Dimension) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorShapeProto_Dimension)
+	if !ok {
+		that2, ok := that.(TensorShapeProto_Dimension)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.Value == nil {
+		if this.Value != nil {
+			return false
+		}
+	} else if this.Value == nil {
+		return false
+	} else if !this.Value.Equal(that1.Value) {
+		return false
+	}
+	if this.Denotation != that1.Denotation {
+		return false
+	}
+	return true
+}
+func (this *TensorShapeProto_Dimension_DimValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorShapeProto_Dimension_DimValue)
+	if !ok {
+		that2, ok := that.(TensorShapeProto_Dimension_DimValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DimValue != that1.DimValue {
+		return false
+	}
+	return true
+}
+func (this *TensorShapeProto_Dimension_DimParam) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TensorShapeProto_Dimension_DimParam)
+	if !ok {
+		that2, ok := that.(TensorShapeProto_Dimension_DimParam)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DimParam != that1.DimParam {
+		return false
+	}
+	return true
+}
+func (this *TypeProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TypeProto)
+	if !ok {
+		that2, ok := that.(TypeProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.Value == nil {
+		if this.Value != nil {
+			return false
+		}
+	} else if this.Value == nil {
+		return false
+	} else if !this.Value.Equal(that1.Value) {
+		return false
+	}
+	if this.Denotation != that1.Denotation {
+		return false
+	}
+	return true
+}
+func (this *TypeProto_TensorType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TypeProto_TensorType)
+	if !ok {
+		that2, ok := that.(TypeProto_TensorType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TensorType.Equal(that1.TensorType) {
+		return false
+	}
+	return true
+}
+func (this *TypeProto_Tensor) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TypeProto_Tensor)
+	if !ok {
+		that2, ok := that.(TypeProto_Tensor)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ElemType != that1.ElemType {
+		return false
+	}
+	if !this.Shape.Equal(that1.Shape) {
+		return false
+	}
+	return true
+}
+func (this *OperatorSetIdProto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*OperatorSetIdProto)
+	if !ok {
+		that2, ok := that.(OperatorSetIdProto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	if this.Version != that1.Version {
+		return false
+	}
+	return true
+}
+func (this *AttributeProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 18)
+	s = append(s, "&onnx.AttributeProto{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "RefAttrName: "+fmt.Sprintf("%#v", this.RefAttrName)+",\n")
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "F: "+fmt.Sprintf("%#v", this.F)+",\n")
+	s = append(s, "I: "+fmt.Sprintf("%#v", this.I)+",\n")
+	s = append(s, "S: "+fmt.Sprintf("%#v", this.S)+",\n")
+	if this.T != nil {
+		s = append(s, "T: "+fmt.Sprintf("%#v", this.T)+",\n")
+	}
+	if this.G != nil {
+		s = append(s, "G: "+fmt.Sprintf("%#v", this.G)+",\n")
+	}
+	s = append(s, "Floats: "+fmt.Sprintf("%#v", this.Floats)+",\n")
+	s = append(s, "Ints: "+fmt.Sprintf("%#v", this.Ints)+",\n")
+	s = append(s, "Strings: "+fmt.Sprintf("%#v", this.Strings)+",\n")
+	if this.Tensors != nil {
+		s = append(s, "Tensors: "+fmt.Sprintf("%#v", this.Tensors)+",\n")
+	}
+	if this.Graphs != nil {
+		s = append(s, "Graphs: "+fmt.Sprintf("%#v", this.Graphs)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ValueInfoProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&onnx.ValueInfoProto{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Type != nil {
+		s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	}
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NodeProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&onnx.NodeProto{")
+	s = append(s, "Input: "+fmt.Sprintf("%#v", this.Input)+",\n")
+	s = append(s, "Output: "+fmt.Sprintf("%#v", this.Output)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "OpType: "+fmt.Sprintf("%#v", this.OpType)+",\n")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	if this.Attribute != nil {
+		s = append(s, "Attribute: "+fmt.Sprintf("%#v", this.Attribute)+",\n")
+	}
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ModelProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&onnx.ModelProto{")
+	s = append(s, "IrVersion: "+fmt.Sprintf("%#v", this.IrVersion)+",\n")
+	if this.OpsetImport != nil {
+		s = append(s, "OpsetImport: "+fmt.Sprintf("%#v", this.OpsetImport)+",\n")
+	}
+	s = append(s, "ProducerName: "+fmt.Sprintf("%#v", this.ProducerName)+",\n")
+	s = append(s, "ProducerVersion: "+fmt.Sprintf("%#v", this.ProducerVersion)+",\n")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	s = append(s, "ModelVersion: "+fmt.Sprintf("%#v", this.ModelVersion)+",\n")
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	if this.Graph != nil {
+		s = append(s, "Graph: "+fmt.Sprintf("%#v", this.Graph)+",\n")
+	}
+	if this.MetadataProps != nil {
+		s = append(s, "MetadataProps: "+fmt.Sprintf("%#v", this.MetadataProps)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *StringStringEntryProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&onnx.StringStringEntryProto{")
+	s = append(s, "Key: "+fmt.Sprintf("%#v", this.Key)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GraphProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&onnx.GraphProto{")
+	if this.Node != nil {
+		s = append(s, "Node: "+fmt.Sprintf("%#v", this.Node)+",\n")
+	}
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Initializer != nil {
+		s = append(s, "Initializer: "+fmt.Sprintf("%#v", this.Initializer)+",\n")
+	}
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	if this.Input != nil {
+		s = append(s, "Input: "+fmt.Sprintf("%#v", this.Input)+",\n")
+	}
+	if this.Output != nil {
+		s = append(s, "Output: "+fmt.Sprintf("%#v", this.Output)+",\n")
+	}
+	if this.ValueInfo != nil {
+		s = append(s, "ValueInfo: "+fmt.Sprintf("%#v", this.ValueInfo)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TensorProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&onnx.TensorProto{")
+	s = append(s, "Dims: "+fmt.Sprintf("%#v", this.Dims)+",\n")
+	s = append(s, "DataType: "+fmt.Sprintf("%#v", this.DataType)+",\n")
+	if this.Segment != nil {
+		s = append(s, "Segment: "+fmt.Sprintf("%#v", this.Segment)+",\n")
+	}
+	s = append(s, "FloatData: "+fmt.Sprintf("%#v", this.FloatData)+",\n")
+	s = append(s, "Int32Data: "+fmt.Sprintf("%#v", this.Int32Data)+",\n")
+	s = append(s, "StringData: "+fmt.Sprintf("%#v", this.StringData)+",\n")
+	s = append(s, "Int64Data: "+fmt.Sprintf("%#v", this.Int64Data)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "DocString: "+fmt.Sprintf("%#v", this.DocString)+",\n")
+	s = append(s, "RawData: "+fmt.Sprintf("%#v", this.RawData)+",\n")
+	s = append(s, "DoubleData: "+fmt.Sprintf("%#v", this.DoubleData)+",\n")
+	s = append(s, "Uint64Data: "+fmt.Sprintf("%#v", this.Uint64Data)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TensorProto_Segment) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&onnx.TensorProto_Segment{")
+	s = append(s, "Begin: "+fmt.Sprintf("%#v", this.Begin)+",\n")
+	s = append(s, "End: "+fmt.Sprintf("%#v", this.End)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TensorShapeProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&onnx.TensorShapeProto{")
+	if this.Dim != nil {
+		s = append(s, "Dim: "+fmt.Sprintf("%#v", this.Dim)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TensorShapeProto_Dimension) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&onnx.TensorShapeProto_Dimension{")
+	if this.Value != nil {
+		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	}
+	s = append(s, "Denotation: "+fmt.Sprintf("%#v", this.Denotation)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TensorShapeProto_Dimension_DimValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&onnx.TensorShapeProto_Dimension_DimValue{` +
+		`DimValue:` + fmt.Sprintf("%#v", this.DimValue) + `}`}, ", ")
+	return s
+}
+func (this *TensorShapeProto_Dimension_DimParam) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&onnx.TensorShapeProto_Dimension_DimParam{` +
+		`DimParam:` + fmt.Sprintf("%#v", this.DimParam) + `}`}, ", ")
+	return s
+}
+func (this *TypeProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&onnx.TypeProto{")
+	if this.Value != nil {
+		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	}
+	s = append(s, "Denotation: "+fmt.Sprintf("%#v", this.Denotation)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TypeProto_TensorType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&onnx.TypeProto_TensorType{` +
+		`TensorType:` + fmt.Sprintf("%#v", this.TensorType) + `}`}, ", ")
+	return s
+}
+func (this *TypeProto_Tensor) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&onnx.TypeProto_Tensor{")
+	s = append(s, "ElemType: "+fmt.Sprintf("%#v", this.ElemType)+",\n")
+	if this.Shape != nil {
+		s = append(s, "Shape: "+fmt.Sprintf("%#v", this.Shape)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *OperatorSetIdProto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&onnx.OperatorSetIdProto{")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	s = append(s, "Version: "+fmt.Sprintf("%#v", this.Version)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func valueToGoStringOnnx3(v interface{}, typ string) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
 func (m *AttributeProto) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -2835,6 +3762,226 @@ func sovOnnx3(x uint64) (n int) {
 }
 func sozOnnx3(x uint64) (n int) {
 	return sovOnnx3(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (this *AttributeProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AttributeProto{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`F:` + fmt.Sprintf("%v", this.F) + `,`,
+		`I:` + fmt.Sprintf("%v", this.I) + `,`,
+		`S:` + fmt.Sprintf("%v", this.S) + `,`,
+		`T:` + strings.Replace(fmt.Sprintf("%v", this.T), "TensorProto", "TensorProto", 1) + `,`,
+		`G:` + strings.Replace(fmt.Sprintf("%v", this.G), "GraphProto", "GraphProto", 1) + `,`,
+		`Floats:` + fmt.Sprintf("%v", this.Floats) + `,`,
+		`Ints:` + fmt.Sprintf("%v", this.Ints) + `,`,
+		`Strings:` + fmt.Sprintf("%v", this.Strings) + `,`,
+		`Tensors:` + strings.Replace(fmt.Sprintf("%v", this.Tensors), "TensorProto", "TensorProto", 1) + `,`,
+		`Graphs:` + strings.Replace(fmt.Sprintf("%v", this.Graphs), "GraphProto", "GraphProto", 1) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`RefAttrName:` + fmt.Sprintf("%v", this.RefAttrName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ValueInfoProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ValueInfoProto{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Type:` + strings.Replace(fmt.Sprintf("%v", this.Type), "TypeProto", "TypeProto", 1) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NodeProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NodeProto{`,
+		`Input:` + fmt.Sprintf("%v", this.Input) + `,`,
+		`Output:` + fmt.Sprintf("%v", this.Output) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`OpType:` + fmt.Sprintf("%v", this.OpType) + `,`,
+		`Attribute:` + strings.Replace(fmt.Sprintf("%v", this.Attribute), "AttributeProto", "AttributeProto", 1) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ModelProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ModelProto{`,
+		`IrVersion:` + fmt.Sprintf("%v", this.IrVersion) + `,`,
+		`ProducerName:` + fmt.Sprintf("%v", this.ProducerName) + `,`,
+		`ProducerVersion:` + fmt.Sprintf("%v", this.ProducerVersion) + `,`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`ModelVersion:` + fmt.Sprintf("%v", this.ModelVersion) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`Graph:` + strings.Replace(fmt.Sprintf("%v", this.Graph), "GraphProto", "GraphProto", 1) + `,`,
+		`OpsetImport:` + strings.Replace(fmt.Sprintf("%v", this.OpsetImport), "OperatorSetIdProto", "OperatorSetIdProto", 1) + `,`,
+		`MetadataProps:` + strings.Replace(fmt.Sprintf("%v", this.MetadataProps), "StringStringEntryProto", "StringStringEntryProto", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *StringStringEntryProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&StringStringEntryProto{`,
+		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GraphProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GraphProto{`,
+		`Node:` + strings.Replace(fmt.Sprintf("%v", this.Node), "NodeProto", "NodeProto", 1) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Initializer:` + strings.Replace(fmt.Sprintf("%v", this.Initializer), "TensorProto", "TensorProto", 1) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`Input:` + strings.Replace(fmt.Sprintf("%v", this.Input), "ValueInfoProto", "ValueInfoProto", 1) + `,`,
+		`Output:` + strings.Replace(fmt.Sprintf("%v", this.Output), "ValueInfoProto", "ValueInfoProto", 1) + `,`,
+		`ValueInfo:` + strings.Replace(fmt.Sprintf("%v", this.ValueInfo), "ValueInfoProto", "ValueInfoProto", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorProto{`,
+		`Dims:` + fmt.Sprintf("%v", this.Dims) + `,`,
+		`DataType:` + fmt.Sprintf("%v", this.DataType) + `,`,
+		`Segment:` + strings.Replace(fmt.Sprintf("%v", this.Segment), "TensorProto_Segment", "TensorProto_Segment", 1) + `,`,
+		`FloatData:` + fmt.Sprintf("%v", this.FloatData) + `,`,
+		`Int32Data:` + fmt.Sprintf("%v", this.Int32Data) + `,`,
+		`StringData:` + fmt.Sprintf("%v", this.StringData) + `,`,
+		`Int64Data:` + fmt.Sprintf("%v", this.Int64Data) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`RawData:` + fmt.Sprintf("%v", this.RawData) + `,`,
+		`DoubleData:` + fmt.Sprintf("%v", this.DoubleData) + `,`,
+		`Uint64Data:` + fmt.Sprintf("%v", this.Uint64Data) + `,`,
+		`DocString:` + fmt.Sprintf("%v", this.DocString) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorProto_Segment) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorProto_Segment{`,
+		`Begin:` + fmt.Sprintf("%v", this.Begin) + `,`,
+		`End:` + fmt.Sprintf("%v", this.End) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorShapeProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorShapeProto{`,
+		`Dim:` + strings.Replace(fmt.Sprintf("%v", this.Dim), "TensorShapeProto_Dimension", "TensorShapeProto_Dimension", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorShapeProto_Dimension) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorShapeProto_Dimension{`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`Denotation:` + fmt.Sprintf("%v", this.Denotation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorShapeProto_Dimension_DimValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorShapeProto_Dimension_DimValue{`,
+		`DimValue:` + fmt.Sprintf("%v", this.DimValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TensorShapeProto_Dimension_DimParam) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TensorShapeProto_Dimension_DimParam{`,
+		`DimParam:` + fmt.Sprintf("%v", this.DimParam) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TypeProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TypeProto{`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`Denotation:` + fmt.Sprintf("%v", this.Denotation) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TypeProto_TensorType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TypeProto_TensorType{`,
+		`TensorType:` + strings.Replace(fmt.Sprintf("%v", this.TensorType), "TypeProto_Tensor", "TypeProto_Tensor", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TypeProto_Tensor) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TypeProto_Tensor{`,
+		`ElemType:` + fmt.Sprintf("%v", this.ElemType) + `,`,
+		`Shape:` + strings.Replace(fmt.Sprintf("%v", this.Shape), "TensorShapeProto", "TensorShapeProto", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *OperatorSetIdProto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&OperatorSetIdProto{`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`Version:` + fmt.Sprintf("%v", this.Version) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func valueToStringOnnx3(v interface{}) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("*%v", pv)
 }
 func (m *AttributeProto) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -5727,94 +6874,96 @@ var (
 	ErrIntOverflowOnnx3   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() { proto.RegisterFile("onnx.proto3", fileDescriptor_onnx_5b7104ab7f4c2e49) }
+func init() { proto.RegisterFile("onnx.proto3", fileDescriptor_onnx_6350588a922b672e) }
 
-var fileDescriptor_onnx_5b7104ab7f4c2e49 = []byte{
-	// 1368 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x56, 0x4d, 0x6f, 0xdb, 0x46,
-	0x13, 0xf6, 0x8a, 0x92, 0x28, 0x0e, 0x25, 0x65, 0xdf, 0x45, 0xe2, 0x97, 0x31, 0xde, 0x28, 0x7a,
-	0x15, 0xa0, 0x50, 0xd3, 0xc0, 0xb0, 0x24, 0x43, 0x49, 0xd1, 0x4b, 0xed, 0x58, 0x49, 0x04, 0x38,
-	0x92, 0x41, 0x29, 0x41, 0x6f, 0x04, 0x6d, 0xae, 0x1c, 0xa2, 0xe6, 0x07, 0xc8, 0x55, 0x52, 0xf7,
-	0xd6, 0x7f, 0xd0, 0xfe, 0x8b, 0xfe, 0x86, 0xf6, 0xd4, 0x5b, 0x8f, 0xe9, 0xad, 0xe8, 0x29, 0x48,
-	0xfe, 0x48, 0xb1, 0xb3, 0xa4, 0xbe, 0xec, 0x24, 0x17, 0x62, 0x67, 0xf6, 0x99, 0x8f, 0x9d, 0x7d,
-	0x66, 0x87, 0x60, 0x46, 0x61, 0xf8, 0xc3, 0x6e, 0x9c, 0x44, 0x22, 0xea, 0xb1, 0xa2, 0x14, 0x5a,
-	0xbf, 0x17, 0xa1, 0x7e, 0x20, 0x44, 0xe2, 0x9f, 0xce, 0x05, 0x3f, 0x91, 0x3b, 0x8c, 0x41, 0x31,
-	0x74, 0x03, 0x6e, 0x91, 0x26, 0x69, 0x1b, 0x36, 0xae, 0x59, 0x15, 0xc8, 0xcc, 0x2a, 0x34, 0x49,
-	0xbb, 0x60, 0x93, 0x99, 0x94, 0x7c, 0x4b, 0x6b, 0x92, 0xb6, 0x66, 0x13, 0x5f, 0x4a, 0xa9, 0x55,
-	0x6c, 0x92, 0x76, 0xd5, 0x26, 0x29, 0xbb, 0x0b, 0x44, 0x58, 0xa5, 0x26, 0x69, 0x9b, 0xdd, 0xff,
-	0xec, 0x62, 0xbc, 0x29, 0x0f, 0xd3, 0x28, 0x41, 0xdf, 0x36, 0x11, 0xac, 0x01, 0xe4, 0xdc, 0x2a,
-	0x23, 0x80, 0x2a, 0xc0, 0xd3, 0xc4, 0x8d, 0x5f, 0x65, 0xfb, 0xe7, 0x6c, 0x1b, 0xca, 0xb3, 0x8b,
-	0xc8, 0x15, 0xa9, 0xa5, 0x37, 0xb5, 0x76, 0xc1, 0xce, 0x24, 0x99, 0x96, 0x1f, 0x8a, 0xd4, 0xaa,
-	0x34, 0xb5, 0xb6, 0x66, 0xe3, 0x9a, 0x59, 0xa0, 0xa7, 0x22, 0xf1, 0xc3, 0xf3, 0xd4, 0x32, 0x9a,
-	0x5a, 0xbb, 0x6a, 0xe7, 0x22, 0xfb, 0x0a, 0x74, 0x81, 0x71, 0x53, 0x0b, 0x9a, 0xda, 0xf5, 0xc9,
-	0xe4, 0x08, 0xd6, 0x86, 0xf2, 0xb9, 0xcc, 0x21, 0xb5, 0x4c, 0xc4, 0x5e, 0xcd, 0x2b, 0xdb, 0x67,
-	0x77, 0x00, 0xbc, 0xe8, 0xcc, 0x51, 0x51, 0xac, 0x1a, 0x56, 0xc8, 0xf0, 0xa2, 0xb3, 0x09, 0x2a,
-	0x58, 0x1f, 0x8a, 0xe2, 0x32, 0xe6, 0xd6, 0xcd, 0x26, 0x69, 0xd7, 0xbb, 0x2d, 0xe5, 0x66, 0xbd,
-	0xbc, 0x4b, 0x71, 0x7a, 0x19, 0x73, 0x1b, 0xf1, 0xac, 0x05, 0xb5, 0x84, 0xcf, 0x1c, 0x57, 0x88,
-	0xc4, 0xc1, 0xda, 0xdf, 0x42, 0xcf, 0x66, 0xc2, 0x67, 0x12, 0x3e, 0x72, 0x03, 0xde, 0xfa, 0x85,
-	0x40, 0x6d, 0xcd, 0x96, 0xd5, 0xc0, 0x78, 0x31, 0x3a, 0x1a, 0x3c, 0x19, 0x8e, 0x06, 0x47, 0x74,
-	0x8b, 0x19, 0x50, 0x7a, 0x72, 0x3c, 0x3e, 0x98, 0x52, 0xc2, 0x74, 0xd0, 0x86, 0xa3, 0x29, 0x2d,
-	0x30, 0x80, 0xf2, 0x64, 0x6a, 0x0f, 0x47, 0x4f, 0xa9, 0x26, 0xd7, 0xd3, 0xc1, 0x68, 0x32, 0xb6,
-	0x69, 0x51, 0x62, 0x9f, 0xda, 0x07, 0x27, 0xcf, 0x68, 0x49, 0xaa, 0xd1, 0x6c, 0x42, 0xcb, 0xac,
-	0x02, 0xc5, 0xe1, 0x68, 0x3a, 0xa1, 0x3a, 0x33, 0x41, 0x57, 0x86, 0x13, 0x5a, 0x91, 0x82, 0xb2,
-	0x9c, 0x50, 0x43, 0xe2, 0xd1, 0x74, 0x42, 0xa1, 0xf5, 0x0a, 0xea, 0x2f, 0xdd, 0x8b, 0x39, 0x1f,
-	0x86, 0xb3, 0xe8, 0xe3, 0xe4, 0xb9, 0x97, 0x55, 0xa5, 0x80, 0x97, 0x7e, 0x23, 0xbb, 0x88, 0xcb,
-	0x58, 0x15, 0x24, 0x2b, 0xc1, 0x7a, 0x65, 0xb5, 0x8d, 0xca, 0xb6, 0xfe, 0x22, 0x60, 0x8c, 0x22,
-	0x2f, 0xa3, 0xe8, 0x4d, 0x28, 0xf9, 0x61, 0x3c, 0x17, 0x16, 0x69, 0x6a, 0x6d, 0xc3, 0x56, 0x82,
-	0x64, 0x4e, 0x34, 0x17, 0x52, 0x5d, 0x40, 0x75, 0x26, 0x2d, 0x72, 0xd2, 0x56, 0x72, 0xfa, 0x2f,
-	0xe8, 0x51, 0xec, 0x60, 0x5a, 0x45, 0x54, 0x97, 0xa3, 0x18, 0x8b, 0xda, 0x05, 0xc3, 0xcd, 0xab,
-	0x6c, 0x95, 0x90, 0x0e, 0x37, 0xaf, 0xbb, 0x47, 0x7b, 0x09, 0xdb, 0xc8, 0xbd, 0xbc, 0xc9, 0x8a,
-	0x6d, 0x28, 0x7b, 0x51, 0xe0, 0xfa, 0xa1, 0xa5, 0xab, 0x50, 0x4a, 0x6a, 0xfd, 0xa4, 0x01, 0x3c,
-	0x8f, 0x3c, 0x7e, 0xa1, 0x0e, 0x75, 0x07, 0xc0, 0x4f, 0x9c, 0xd7, 0x3c, 0x49, 0xfd, 0x28, 0xc4,
-	0x02, 0x6a, 0xb6, 0xe1, 0x27, 0x2f, 0x95, 0x82, 0xdd, 0x83, 0x5a, 0x9c, 0x44, 0xde, 0xfc, 0x8c,
-	0x67, 0x1c, 0x29, 0xa0, 0xb3, 0x6a, 0xae, 0x94, 0x24, 0x61, 0x5f, 0x02, 0x5d, 0x80, 0x72, 0x4f,
-	0xea, 0xd8, 0x37, 0x72, 0x7d, 0xee, 0x6f, 0x99, 0x55, 0x71, 0x35, 0x2b, 0x19, 0x27, 0x90, 0x49,
-	0x2d, 0xec, 0x4b, 0x98, 0x49, 0x15, 0x95, 0xb9, 0xf1, 0x67, 0x4e, 0xfc, 0x05, 0x94, 0xb0, 0x61,
-	0xf0, 0xc0, 0xd7, 0xf5, 0x93, 0xda, 0x66, 0xdf, 0x40, 0x35, 0x8a, 0x53, 0x2e, 0x1c, 0x3f, 0x88,
-	0xa3, 0x44, 0x60, 0x6f, 0x9b, 0x5d, 0x4b, 0xc1, 0xc7, 0x31, 0x4f, 0x5c, 0x11, 0x25, 0x13, 0x2e,
-	0x86, 0x9e, 0x32, 0x33, 0x11, 0x3d, 0x44, 0x30, 0x7b, 0x0c, 0xf5, 0x80, 0x0b, 0xd7, 0x73, 0x85,
-	0xeb, 0xc4, 0x49, 0x14, 0xa7, 0x56, 0x1d, 0xcd, 0xff, 0xa7, 0xcc, 0x55, 0x2a, 0xea, 0x3b, 0x08,
-	0x45, 0x72, 0xa9, 0x5c, 0xd4, 0x72, 0x9b, 0x13, 0x69, 0xd2, 0xfa, 0x16, 0xb6, 0xaf, 0x07, 0x32,
-	0x0a, 0xda, 0xf7, 0xfc, 0x32, 0x23, 0xb2, 0x5c, 0x4a, 0xd6, 0xbd, 0x96, 0x6c, 0xcf, 0x2a, 0xaf,
-	0x84, 0xd6, 0xaf, 0x05, 0x80, 0xe5, 0xc9, 0x24, 0xd9, 0xc3, 0xc8, 0xe3, 0xc8, 0xcc, 0x05, 0xd9,
-	0x17, 0xcc, 0xb5, 0x71, 0x73, 0xc1, 0xc8, 0xc2, 0x0a, 0x23, 0x7b, 0x60, 0xfa, 0xa1, 0x2f, 0x7c,
-	0xf7, 0xc2, 0xff, 0x91, 0x27, 0x19, 0xf5, 0xae, 0x79, 0xb5, 0x56, 0x51, 0x1b, 0xf7, 0x00, 0x9b,
-	0xf7, 0x70, 0x3f, 0xef, 0x13, 0x73, 0x95, 0xc8, 0xeb, 0x2d, 0x9b, 0x77, 0xcf, 0x83, 0x45, 0xf7,
-	0x54, 0x3f, 0x01, 0xce, 0x7b, 0xaa, 0x07, 0x80, 0xc7, 0x77, 0xfc, 0x70, 0x16, 0x59, 0xb5, 0x4f,
-	0x58, 0x18, 0xaf, 0x73, 0xb9, 0xf5, 0x47, 0x09, 0xcc, 0x95, 0xa3, 0xc8, 0x32, 0x78, 0x7e, 0x90,
-	0x62, 0xad, 0x34, 0x1b, 0xd7, 0xec, 0x21, 0x18, 0x78, 0xa3, 0x8b, 0x17, 0xa3, 0xde, 0xdd, 0xb9,
-	0x52, 0x84, 0xdd, 0x23, 0x57, 0xb8, 0xf8, 0x7e, 0x56, 0xbc, 0x6c, 0xc5, 0x7a, 0xa0, 0xa7, 0xfc,
-	0x3c, 0xe0, 0xa1, 0x40, 0xc6, 0x9b, 0xdd, 0xdb, 0x57, 0xcd, 0x26, 0x0a, 0x60, 0xe7, 0x48, 0xf6,
-	0x7f, 0x00, 0x1c, 0x2f, 0x8e, 0x74, 0x63, 0x15, 0xe5, 0xc0, 0x39, 0x2c, 0x50, 0x62, 0x1b, 0xa8,
-	0x95, 0x51, 0x24, 0xc4, 0x0f, 0x45, 0xaf, 0xab, 0x20, 0xf2, 0x5a, 0x4a, 0x0a, 0x82, 0x5a, 0x84,
-	0xdc, 0x05, 0x53, 0xdd, 0x80, 0xc2, 0x94, 0x71, 0x14, 0x81, 0x52, 0xad, 0xf8, 0xe8, 0xef, 0xab,
-	0x7d, 0x39, 0xd7, 0xb4, 0x85, 0x8f, 0xfe, 0x3e, 0x42, 0x72, 0x4a, 0x54, 0x56, 0x28, 0x71, 0x1b,
-	0x2a, 0x89, 0xfb, 0x46, 0x19, 0x19, 0x38, 0x60, 0xf5, 0xc4, 0x7d, 0x83, 0xf0, 0x7b, 0x60, 0x7a,
-	0xd1, 0xfc, 0xf4, 0x82, 0xab, 0x5d, 0x39, 0xe3, 0x08, 0xba, 0x04, 0xa5, 0xce, 0x41, 0xf3, 0x95,
-	0xb8, 0x92, 0x04, 0x45, 0x05, 0x9a, 0x2f, 0x03, 0xaf, 0x53, 0xa8, 0xba, 0x41, 0xa1, 0x9d, 0x0e,
-	0xe8, 0x59, 0xd5, 0x24, 0xff, 0x4f, 0xf9, 0xb9, 0x9f, 0xbf, 0x4d, 0x4a, 0x90, 0x7d, 0xc2, 0x43,
-	0x0f, 0xaf, 0x4a, 0xb3, 0xe5, 0xb2, 0xf5, 0x0f, 0x81, 0x4a, 0x7e, 0x41, 0x9f, 0x18, 0x52, 0x06,
-	0x94, 0x5e, 0x0c, 0x47, 0xd3, 0x47, 0xb4, 0x90, 0xcd, 0x9d, 0x47, 0x6a, 0x48, 0x49, 0x65, 0xa7,
-	0xaf, 0x86, 0x94, 0x5a, 0x96, 0xb2, 0x65, 0xaf, 0x4b, 0xcb, 0xd9, 0xb2, 0xbf, 0x4f, 0xf5, 0x95,
-	0xe9, 0x56, 0x91, 0x2e, 0x0e, 0xc7, 0xe3, 0x63, 0x6a, 0xc8, 0x69, 0x85, 0x21, 0x3a, 0x7d, 0x0a,
-	0x12, 0x72, 0x34, 0x7e, 0x71, 0x78, 0x3c, 0xa0, 0x66, 0xee, 0xbb, 0xd7, 0xa5, 0xd5, 0x7c, 0xdd,
-	0xdf, 0xa7, 0x35, 0x99, 0xe2, 0xe3, 0xf1, 0xf3, 0x93, 0xe3, 0xc1, 0x77, 0xfd, 0x7d, 0x5a, 0x67,
-	0x75, 0x80, 0x4c, 0xec, 0x74, 0x1f, 0xd1, 0x1b, 0xac, 0x0a, 0x95, 0xc3, 0xdc, 0x21, 0x6d, 0xfd,
-	0x46, 0x80, 0x2a, 0x4a, 0x4d, 0x5e, 0xb9, 0xd9, 0x08, 0x63, 0x5d, 0xd0, 0x3c, 0x3f, 0xc8, 0x7a,
-	0xbe, 0xb9, 0xca, 0xbb, 0x25, 0x68, 0xf7, 0xc8, 0x0f, 0x78, 0x28, 0x5f, 0x4f, 0x5b, 0x82, 0x77,
-	0x12, 0x30, 0x16, 0x1a, 0x76, 0x07, 0x0c, 0xcf, 0x0f, 0x1c, 0xf5, 0xbc, 0x60, 0x79, 0x9f, 0x6d,
-	0xd9, 0x15, 0xcf, 0x0f, 0xb0, 0x99, 0xf2, 0xed, 0xd8, 0x4d, 0xdc, 0x40, 0x3d, 0x1a, 0xd9, 0xf6,
-	0x89, 0xd4, 0xb0, 0x06, 0x80, 0xc7, 0xc3, 0x48, 0xb8, 0x62, 0xf9, 0xde, 0xaf, 0x68, 0x0e, 0xf5,
-	0xec, 0xe1, 0x6a, 0xbd, 0x23, 0x60, 0x2c, 0x06, 0x2f, 0xfb, 0x1a, 0x4c, 0xf5, 0x07, 0xa4, 0x9a,
-	0x8d, 0x60, 0xd7, 0x6c, 0x6f, 0x8c, 0xe7, 0xec, 0x1c, 0xcf, 0xb6, 0x6c, 0x50, 0x60, 0xbc, 0xd5,
-	0xf5, 0x88, 0xe5, 0xcd, 0x88, 0x3b, 0x11, 0x94, 0x95, 0x9d, 0xec, 0x67, 0x7e, 0xc1, 0x83, 0x65,
-	0x88, 0xcf, 0xf4, 0xb3, 0x04, 0x63, 0x88, 0x07, 0x50, 0x4a, 0x65, 0xf1, 0xb2, 0xdf, 0x86, 0xed,
-	0xeb, 0xab, 0x6a, 0x2b, 0xd0, 0xf2, 0x88, 0x4f, 0x80, 0x5d, 0x1d, 0x1c, 0x2b, 0xc3, 0x8e, 0xac,
-	0x0d, 0x3b, 0x0b, 0xf4, 0x7c, 0xcc, 0x29, 0x02, 0xe7, 0xe2, 0xfd, 0x33, 0xd0, 0xf3, 0x61, 0xc7,
-	0xa0, 0xee, 0x4c, 0xa6, 0x07, 0xf6, 0xd4, 0x79, 0x39, 0xb0, 0x27, 0xc3, 0xf1, 0x88, 0x6e, 0xb1,
-	0xdb, 0x70, 0x6b, 0x68, 0xe7, 0xb2, 0xd3, 0xdd, 0xeb, 0x3c, 0x74, 0x3a, 0x7b, 0x4e, 0x67, 0x8f,
-	0x92, 0x8f, 0x6c, 0xf5, 0xf6, 0x68, 0x41, 0x52, 0x6b, 0xb9, 0x45, 0xb5, 0x43, 0xeb, 0xcf, 0xf7,
-	0x0d, 0xf2, 0xf6, 0x7d, 0x83, 0xbc, 0x7b, 0xdf, 0x20, 0x3f, 0x7f, 0x68, 0x6c, 0xbd, 0xfd, 0xd0,
-	0xd8, 0xfa, 0xfb, 0x43, 0x63, 0xeb, 0xb4, 0xac, 0xfe, 0xd2, 0xff, 0x0d, 0x00, 0x00, 0xff, 0xff,
-	0x64, 0x81, 0x2d, 0x0f, 0xb3, 0x0b, 0x00, 0x00,
+var fileDescriptor_onnx_6350588a922b672e = []byte{
+	// 1397 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x56, 0xcd, 0x6e, 0xdb, 0x46,
+	0x10, 0xd6, 0x8a, 0x92, 0x28, 0x0e, 0x25, 0x65, 0xbb, 0x48, 0x5c, 0xc6, 0x68, 0x18, 0x55, 0x01,
+	0x0a, 0x35, 0x0d, 0x0c, 0x5b, 0x32, 0x94, 0x14, 0xbd, 0xd4, 0x8e, 0x9d, 0x44, 0x80, 0x23, 0x19,
+	0x2b, 0x25, 0xe8, 0x8d, 0xa0, 0xcd, 0xb5, 0x43, 0xd4, 0xfc, 0x01, 0xb9, 0x4a, 0xea, 0x9e, 0xda,
+	0x37, 0x68, 0xdf, 0x22, 0xcf, 0xd0, 0x9e, 0x7a, 0xeb, 0x31, 0xbd, 0x05, 0x3d, 0x25, 0xca, 0xa5,
+	0xc7, 0x3c, 0x42, 0xb1, 0xbb, 0xa4, 0xfe, 0xec, 0x24, 0x17, 0x62, 0x67, 0xf6, 0x9b, 0x9f, 0x9d,
+	0xfd, 0x66, 0x87, 0x60, 0x46, 0x61, 0xf8, 0xd3, 0x46, 0x9c, 0x44, 0x3c, 0xea, 0x92, 0x92, 0x10,
+	0x5a, 0x7f, 0x96, 0xa0, 0xb1, 0xc3, 0x79, 0xe2, 0x1f, 0x4d, 0x38, 0x3b, 0x14, 0x3b, 0x84, 0x40,
+	0x29, 0x74, 0x03, 0x66, 0xa1, 0x26, 0x6a, 0x1b, 0x54, 0xae, 0x49, 0x0d, 0xd0, 0x89, 0x55, 0x6c,
+	0xa2, 0x76, 0x91, 0xa2, 0x13, 0x21, 0xf9, 0x96, 0xd6, 0x44, 0x6d, 0x8d, 0x22, 0x5f, 0x48, 0xa9,
+	0x55, 0x6a, 0xa2, 0x76, 0x8d, 0xa2, 0x94, 0xdc, 0x04, 0xc4, 0xad, 0x72, 0x13, 0xb5, 0xcd, 0xce,
+	0x67, 0x1b, 0x32, 0xde, 0x98, 0x85, 0x69, 0x94, 0x48, 0xdf, 0x14, 0x71, 0x62, 0x03, 0x3a, 0xb5,
+	0x2a, 0x12, 0x80, 0x15, 0xe0, 0x61, 0xe2, 0xc6, 0xcf, 0xb2, 0xfd, 0x53, 0xb2, 0x06, 0x95, 0x93,
+	0xb3, 0xc8, 0xe5, 0xa9, 0xa5, 0x37, 0xb5, 0x76, 0x91, 0x66, 0x92, 0x48, 0xcb, 0x0f, 0x79, 0x6a,
+	0x55, 0x9b, 0x5a, 0x5b, 0xa3, 0x72, 0x4d, 0x2c, 0xd0, 0x53, 0x9e, 0xf8, 0xe1, 0x69, 0x6a, 0x19,
+	0x4d, 0xad, 0x5d, 0xa3, 0xb9, 0x48, 0xbe, 0x01, 0x9d, 0xcb, 0xb8, 0xa9, 0x05, 0x4d, 0xed, 0xf2,
+	0x64, 0x72, 0x04, 0x69, 0x43, 0xe5, 0x54, 0xe4, 0x90, 0x5a, 0xa6, 0xc4, 0x5e, 0xcc, 0x2b, 0xdb,
+	0x27, 0x37, 0x00, 0xbc, 0xe8, 0xd8, 0x51, 0x51, 0xac, 0xba, 0xac, 0x90, 0xe1, 0x45, 0xc7, 0x23,
+	0xa9, 0x20, 0x3d, 0x28, 0xf1, 0xf3, 0x98, 0x59, 0x57, 0x9b, 0xa8, 0xdd, 0xe8, 0xb4, 0x94, 0x9b,
+	0xe5, 0xf2, 0xce, 0xc5, 0xf1, 0x79, 0xcc, 0xa8, 0xc4, 0x93, 0x16, 0xd4, 0x13, 0x76, 0xe2, 0xb8,
+	0x9c, 0x27, 0x8e, 0xac, 0xfd, 0x35, 0xe9, 0xd9, 0x4c, 0xd8, 0x89, 0x80, 0x0f, 0xdc, 0x80, 0xb5,
+	0x7e, 0x47, 0x50, 0x5f, 0xb2, 0x25, 0x75, 0x30, 0x9e, 0x0c, 0xf6, 0xf6, 0x1f, 0xf4, 0x07, 0xfb,
+	0x7b, 0xb8, 0x40, 0x0c, 0x28, 0x3f, 0x38, 0x18, 0xee, 0x8c, 0x31, 0x22, 0x3a, 0x68, 0xfd, 0xc1,
+	0x18, 0x17, 0x09, 0x40, 0x65, 0x34, 0xa6, 0xfd, 0xc1, 0x43, 0xac, 0x89, 0xf5, 0x78, 0x7f, 0x30,
+	0x1a, 0x52, 0x5c, 0x12, 0xd8, 0x87, 0x74, 0xe7, 0xf0, 0x11, 0x2e, 0x0b, 0xb5, 0x34, 0x1b, 0xe1,
+	0x0a, 0xa9, 0x42, 0xa9, 0x3f, 0x18, 0x8f, 0xb0, 0x4e, 0x4c, 0xd0, 0x95, 0xe1, 0x08, 0x57, 0x85,
+	0xa0, 0x2c, 0x47, 0xd8, 0x10, 0x78, 0x69, 0x3a, 0xc2, 0xd0, 0x7a, 0x06, 0x8d, 0xa7, 0xee, 0xd9,
+	0x84, 0xf5, 0xc3, 0x93, 0xe8, 0xc3, 0xe4, 0xb9, 0x95, 0x55, 0xa5, 0x28, 0x2f, 0xfd, 0x4a, 0x76,
+	0x11, 0xe7, 0xb1, 0x2a, 0x48, 0x56, 0x82, 0xe5, 0xca, 0x6a, 0x2b, 0x95, 0x6d, 0xfd, 0x83, 0xc0,
+	0x18, 0x44, 0x5e, 0x46, 0xd1, 0xab, 0x50, 0xf6, 0xc3, 0x78, 0xc2, 0x2d, 0xd4, 0xd4, 0xda, 0x06,
+	0x55, 0x82, 0x60, 0x4e, 0x34, 0xe1, 0x42, 0x5d, 0x94, 0xea, 0x4c, 0x9a, 0xe5, 0xa4, 0x2d, 0xe4,
+	0xf4, 0x39, 0xe8, 0x51, 0xec, 0xc8, 0xb4, 0x4a, 0x52, 0x5d, 0x89, 0x62, 0x59, 0xd4, 0x0e, 0x18,
+	0x6e, 0x5e, 0x65, 0xab, 0x2c, 0xe9, 0x70, 0xf5, 0xb2, 0x7b, 0xa4, 0x73, 0xd8, 0x4a, 0xee, 0x95,
+	0x55, 0x56, 0xac, 0x41, 0xc5, 0x8b, 0x02, 0xd7, 0x0f, 0x2d, 0x5d, 0x85, 0x52, 0x52, 0xeb, 0x57,
+	0x0d, 0xe0, 0x71, 0xe4, 0xb1, 0x33, 0x75, 0xa8, 0x1b, 0x00, 0x7e, 0xe2, 0x3c, 0x67, 0x49, 0xea,
+	0x47, 0xa1, 0x2c, 0xa0, 0x46, 0x0d, 0x3f, 0x79, 0xaa, 0x14, 0xe4, 0x16, 0xd4, 0xe3, 0x24, 0xf2,
+	0x26, 0xc7, 0x2c, 0xe3, 0x48, 0x51, 0x3a, 0xab, 0xe5, 0x4a, 0x41, 0x12, 0xf2, 0x35, 0xe0, 0x19,
+	0x28, 0xf7, 0xa4, 0x8e, 0x7d, 0x25, 0xd7, 0xe7, 0xfe, 0xe6, 0x59, 0x95, 0x16, 0xb3, 0x12, 0x71,
+	0x02, 0x91, 0xd4, 0xcc, 0xbe, 0x2c, 0x33, 0xa9, 0x49, 0x65, 0x6e, 0xfc, 0x89, 0x13, 0x7f, 0x05,
+	0x65, 0xd9, 0x30, 0xf2, 0xc0, 0x97, 0xf5, 0x93, 0xda, 0x26, 0xdf, 0x41, 0x2d, 0x8a, 0x53, 0xc6,
+	0x1d, 0x3f, 0x88, 0xa3, 0x84, 0xcb, 0xde, 0x36, 0x3b, 0x96, 0x82, 0x0f, 0x63, 0x96, 0xb8, 0x3c,
+	0x4a, 0x46, 0x8c, 0xf7, 0x3d, 0x65, 0x66, 0x4a, 0x74, 0x5f, 0x82, 0xc9, 0x7d, 0x68, 0x04, 0x8c,
+	0xbb, 0x9e, 0xcb, 0x5d, 0x27, 0x4e, 0xa2, 0x38, 0xb5, 0x1a, 0xd2, 0xfc, 0x0b, 0x65, 0xae, 0x52,
+	0x51, 0xdf, 0xfd, 0x90, 0x27, 0xe7, 0xca, 0x45, 0x3d, 0xb7, 0x39, 0x14, 0x26, 0xad, 0xef, 0x61,
+	0xed, 0x72, 0x20, 0xc1, 0xa0, 0xfd, 0xc8, 0xce, 0x33, 0x22, 0x8b, 0xa5, 0x60, 0xdd, 0x73, 0xc1,
+	0xf6, 0xac, 0xf2, 0x4a, 0x68, 0xbd, 0x2c, 0x02, 0xcc, 0x4f, 0x26, 0xc8, 0x1e, 0x46, 0x1e, 0x93,
+	0xcc, 0x9c, 0x91, 0x7d, 0xc6, 0x5c, 0x2a, 0x37, 0x67, 0x8c, 0x2c, 0x2e, 0x30, 0xb2, 0x0b, 0xa6,
+	0x1f, 0xfa, 0xdc, 0x77, 0xcf, 0xfc, 0x9f, 0x59, 0x92, 0x51, 0xef, 0x92, 0x57, 0x6b, 0x11, 0xb5,
+	0x72, 0x0f, 0xb0, 0x7a, 0x0f, 0xb7, 0xf3, 0x3e, 0x31, 0x17, 0x89, 0xbc, 0xdc, 0xb2, 0x79, 0xf7,
+	0xdc, 0x99, 0x75, 0x4f, 0xed, 0x23, 0xe0, 0xbc, 0xa7, 0xba, 0x00, 0xf2, 0xf8, 0x8e, 0x1f, 0x9e,
+	0x44, 0x56, 0xfd, 0x23, 0x16, 0xc6, 0xf3, 0x5c, 0x6e, 0xfd, 0x55, 0x06, 0x73, 0xe1, 0x28, 0xa2,
+	0x0c, 0x9e, 0x1f, 0xa4, 0xb2, 0x56, 0x1a, 0x95, 0x6b, 0x72, 0x17, 0x0c, 0x79, 0xa3, 0xb3, 0x17,
+	0xa3, 0xd1, 0x59, 0xbf, 0x50, 0x84, 0x8d, 0x3d, 0x97, 0xbb, 0xf2, 0xfd, 0xac, 0x7a, 0xd9, 0x8a,
+	0x74, 0x41, 0x4f, 0xd9, 0x69, 0xc0, 0x42, 0x2e, 0x19, 0x6f, 0x76, 0xae, 0x5f, 0x34, 0x1b, 0x29,
+	0x00, 0xcd, 0x91, 0xe4, 0x4b, 0x00, 0x39, 0x5e, 0x1c, 0xe1, 0xc6, 0x2a, 0x89, 0x81, 0xb3, 0x5b,
+	0xc4, 0x88, 0x1a, 0x52, 0x2b, 0xa2, 0x08, 0x88, 0x1f, 0xf2, 0x6e, 0x47, 0x41, 0xc4, 0xb5, 0x94,
+	0x15, 0x44, 0x6a, 0x25, 0xe4, 0x26, 0x98, 0xea, 0x06, 0x14, 0xa6, 0x22, 0x47, 0x11, 0x28, 0xd5,
+	0x82, 0x8f, 0xde, 0xb6, 0xda, 0x17, 0x73, 0x4d, 0x9b, 0xf9, 0xe8, 0x6d, 0x4b, 0x48, 0x4e, 0x89,
+	0xea, 0x02, 0x25, 0xae, 0x43, 0x35, 0x71, 0x5f, 0x28, 0x23, 0x43, 0x0e, 0x58, 0x3d, 0x71, 0x5f,
+	0x48, 0xf8, 0x2d, 0x30, 0xbd, 0x68, 0x72, 0x74, 0xc6, 0xd4, 0xae, 0x98, 0x71, 0x48, 0xba, 0x04,
+	0xa5, 0xce, 0x41, 0x93, 0x85, 0xb8, 0x82, 0x04, 0x25, 0x05, 0x9a, 0xcc, 0x03, 0x2f, 0x53, 0xa8,
+	0xb6, 0x42, 0xa1, 0xf5, 0x2d, 0xd0, 0xb3, 0xaa, 0x09, 0xfe, 0x1f, 0xb1, 0x53, 0x3f, 0x7f, 0x9b,
+	0x94, 0x20, 0xfa, 0x84, 0x85, 0x9e, 0xbc, 0x2a, 0x8d, 0x8a, 0x65, 0xeb, 0x5f, 0x04, 0xd5, 0xfc,
+	0x82, 0x3e, 0x32, 0xa4, 0x0c, 0x28, 0x3f, 0xe9, 0x0f, 0xc6, 0xf7, 0x70, 0x31, 0x9b, 0x3b, 0xf7,
+	0xd4, 0x90, 0x12, 0xca, 0xad, 0x9e, 0x1a, 0x52, 0x6a, 0x59, 0xce, 0x96, 0xdd, 0x0e, 0xae, 0x64,
+	0xcb, 0xde, 0x36, 0xd6, 0x17, 0xa6, 0x5b, 0x55, 0xb8, 0xd8, 0x1d, 0x0e, 0x0f, 0xb0, 0x21, 0xa6,
+	0x95, 0x0c, 0xb1, 0xd5, 0xc3, 0x20, 0x20, 0x7b, 0xc3, 0x27, 0xbb, 0x07, 0xfb, 0xd8, 0xcc, 0x7d,
+	0x77, 0x3b, 0xb8, 0x96, 0xaf, 0x7b, 0xdb, 0xb8, 0x2e, 0x52, 0xbc, 0x3f, 0x7c, 0x7c, 0x78, 0xb0,
+	0xff, 0x43, 0x6f, 0x1b, 0x37, 0x48, 0x03, 0x20, 0x13, 0xb7, 0x3a, 0xf7, 0xf0, 0x15, 0x52, 0x83,
+	0xea, 0x6e, 0xee, 0x10, 0xb7, 0xfe, 0x40, 0x80, 0x15, 0xa5, 0x46, 0xcf, 0xdc, 0x6c, 0x84, 0x91,
+	0x0e, 0x68, 0x9e, 0x1f, 0x64, 0x3d, 0xdf, 0x5c, 0xe4, 0xdd, 0x1c, 0xb4, 0xb1, 0xe7, 0x07, 0x2c,
+	0x14, 0xaf, 0x27, 0x15, 0xe0, 0xf5, 0x04, 0x8c, 0x99, 0x86, 0xdc, 0x00, 0xc3, 0xf3, 0x03, 0x47,
+	0x3d, 0x2f, 0xb2, 0xbc, 0x8f, 0x0a, 0xb4, 0xea, 0xf9, 0x81, 0x6c, 0xa6, 0x7c, 0x3b, 0x76, 0x13,
+	0x37, 0x50, 0x8f, 0x46, 0xb6, 0x7d, 0x28, 0x34, 0xc4, 0x06, 0xf0, 0x58, 0x18, 0x71, 0x97, 0xcf,
+	0xdf, 0xfb, 0x05, 0xcd, 0xae, 0x9e, 0x3d, 0x5c, 0xad, 0x37, 0x08, 0x8c, 0xd9, 0xe0, 0x25, 0xdf,
+	0x82, 0xa9, 0xfe, 0x80, 0x54, 0xb3, 0x21, 0xd9, 0x35, 0x6b, 0x2b, 0xe3, 0x39, 0x3b, 0xc7, 0xa3,
+	0x02, 0x05, 0x05, 0x96, 0xb7, 0xba, 0x1c, 0xb1, 0xb2, 0x1a, 0x71, 0x3d, 0x82, 0x8a, 0xb2, 0x13,
+	0xfd, 0xcc, 0xce, 0x58, 0x30, 0x0f, 0xf1, 0x89, 0x7e, 0x16, 0x60, 0x19, 0xe2, 0x0e, 0x94, 0x53,
+	0x51, 0xbc, 0xec, 0xb7, 0x61, 0xed, 0xf2, 0xaa, 0x52, 0x05, 0x9a, 0x1f, 0xf1, 0x01, 0x90, 0x8b,
+	0x83, 0x63, 0x61, 0xd8, 0xa1, 0xa5, 0x61, 0x67, 0x81, 0x9e, 0x8f, 0x39, 0x45, 0xe0, 0x5c, 0xbc,
+	0x7d, 0x0c, 0x7a, 0x3e, 0xec, 0x08, 0x34, 0x9c, 0xd1, 0x78, 0x87, 0x8e, 0x9d, 0xa7, 0xfb, 0x74,
+	0xd4, 0x1f, 0x0e, 0x70, 0x81, 0x5c, 0x87, 0x6b, 0x7d, 0x9a, 0xcb, 0x4e, 0x67, 0x73, 0xeb, 0xae,
+	0xb3, 0xb5, 0xe9, 0x6c, 0x6d, 0x62, 0xf4, 0x81, 0xad, 0xee, 0x26, 0x2e, 0x0a, 0x6a, 0xcd, 0xb7,
+	0xb0, 0xb6, 0xbb, 0xfd, 0xea, 0xad, 0x5d, 0x78, 0xfd, 0xd6, 0x2e, 0xbc, 0x7f, 0x6b, 0xa3, 0x5f,
+	0xa6, 0x36, 0x7a, 0x39, 0xb5, 0xd1, 0xdf, 0x53, 0x1b, 0xbd, 0x9a, 0xda, 0xe8, 0xcd, 0xd4, 0x46,
+	0xff, 0x4d, 0xed, 0xc2, 0xfb, 0xa9, 0x8d, 0x7e, 0x7b, 0x67, 0x17, 0x5e, 0xbd, 0xb3, 0x0b, 0xaf,
+	0xdf, 0xd9, 0x85, 0xa3, 0x8a, 0xfa, 0x83, 0xff, 0x3f, 0x00, 0x00, 0xff, 0xff, 0x7b, 0xec, 0xca,
+	0x43, 0xcf, 0x0b, 0x00, 0x00,
 }

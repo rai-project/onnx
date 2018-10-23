@@ -2,8 +2,8 @@
 //go:generate go get github.com/alvaroloes/enumer
 //go:generate go get github.com/jteeuwen/go-bindata/...
 //go:generate go get github.com/elazarl/go-bindata-assetfs/...
+//go:generate go get github.com/golang/protobuf/protoc-gen-go
 //go:generate go get github.com/gogo/protobuf/...
-//go:generate easyjson -snake_case -disallow_unknown_fields -pkg onnx
-//go:generate protoc --gogofaster_out=. -Iproto onnx.proto3
+//go:generate protoc --gogoslick_out=. -Iproto onnx.proto3
 
 package onnx
