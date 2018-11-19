@@ -6,16 +6,8 @@ fmt:
 install-deps:
 	go get github.com/jteeuwen/go-bindata/...
 	go get github.com/elazarl/go-bindata-assetfs/...
-
-glide-install:
-	glide install --force
-
-dep-ensure:
+	go get github.com/golang/dep 
 	dep ensure -v
-
-logrus-fix:
-	rm -fr vendor/github.com/Sirupsen
-	find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
 
 generate: clean generate-proto
 
@@ -27,7 +19,7 @@ clean-proto:
 
 clean: clean-proto
 
-travis: install-deps dep-ensure logrus-fix shared
+travis: install-deps shared
 	echo "building..."
 	go build
 
