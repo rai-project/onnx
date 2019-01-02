@@ -19,10 +19,8 @@ var (
 
 // TestModelShapeInfer ...
 func TestModelShapeInfer(t *testing.T) {
-
-	//onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
-
 	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test.onnx")
+	// onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "mnist", "mnist.onnx")
 	// onnxModelFile = filepath.Join(homedir, "onnx_models", "bvlc_alexnet", "model.onnx")
 
 	model, err := New(onnxModelFile)
@@ -36,7 +34,7 @@ func TestModelShapeInfer(t *testing.T) {
 	}
 
 	buf, err := proto.Marshal(model)
-	com.WriteFile(filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "testa_inferred.onnx"), buf)
+	com.WriteFile(filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "", "test_inferred.onnx"), buf)
 
 	// assert.Equal(t, "Conv", nodes[0].GetOpType())
 	// assert.Equal(t, "Relu", nodes[1].GetOpType())

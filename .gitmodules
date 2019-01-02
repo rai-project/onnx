@@ -1,4 +1,4 @@
 [submodule "onnx"]
 	path = onnx
 	url = https://github.com/onnx/onnx
-        branch = rel-1.2.2
+        branch = rel-1.3.0

@@ -10,8 +10,7 @@ import (
 )
 
 // TestUnmarshalModel ...
-func XXXTestUnmarshalModel(t *testing.T) {
-
+func TestUnmarshalModel(t *testing.T) {
 	onnxModelFile := filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "mnist", "mnist_inferred.onnx")
 
 	model, err := ReadModel(onnxModelFile)
@@ -21,8 +20,6 @@ func XXXTestUnmarshalModel(t *testing.T) {
 	graph := model.GetGraph()
 	nodes := graph.GetNode()
 
-	// pp.Println(nodes)
-	// pp.Println(graph.GetName())
 	for _, val := range graph.GetValueInfo() {
 		pp.Println(val)
 	}
