@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	sourcepath "github.com/GeertJohan/go-sourcepath"
-	"github.com/k0kubun/pp"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,8 +25,6 @@ func TestRemoveWeights(t *testing.T) {
 	fmt.Printf("before size: %d\n", len(bts))
 
 	err = model.RemoveWeights()
-
-	pp.Println(model)
 
 	bts, err = model.Marshal()
 	assert.NoError(t, err)

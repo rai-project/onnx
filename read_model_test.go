@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	sourcepath "github.com/GeertJohan/go-sourcepath"
-	"github.com/k0kubun/pp"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +20,7 @@ func TestUnmarshalModel(t *testing.T) {
 	nodes := graph.GetNode()
 
 	for _, val := range graph.GetValueInfo() {
-		pp.Println(val)
+		_ := val
 	}
 
 	assert.Equal(t, int64(3), model.GetIrVersion())

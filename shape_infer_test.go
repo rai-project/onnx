@@ -6,7 +6,6 @@ import (
 
 	"github.com/Unknwon/com"
 	"github.com/gogo/protobuf/proto"
-	"github.com/k0kubun/pp"
 
 	sourcepath "github.com/GeertJohan/go-sourcepath"
 	home "github.com/mitchellh/go-homedir"
@@ -30,7 +29,7 @@ func TestModelShapeInfer(t *testing.T) {
 	graph := model.GetGraph()
 
 	for _, val := range graph.GetValueInfo() {
-		pp.Println(val.GetType().GetValue())
+		_ := val.GetType().GetValue()
 	}
 
 	buf, err := proto.Marshal(model)
