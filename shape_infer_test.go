@@ -29,7 +29,7 @@ func TestModelShapeInfer(t *testing.T) {
 	graph := model.GetGraph()
 
 	for _, val := range graph.GetValueInfo() {
-		_ := val.GetType().GetValue()
+		_ = val.GetType().GetValue()
 	}
 
 	buf, err := proto.Marshal(model)
