@@ -42,10 +42,6 @@
   version = "1.1.1"
 
 [[constraint]]
-  name = "github.com/k0kubun/pp"
-  version = "2.3.0"
-
-[[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
 
@@ -55,4 +51,3 @@
 
 [prune]
   go-tests = true
-  unused-packages = true

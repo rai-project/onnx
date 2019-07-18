@@ -1,0 +1,74 @@
+FROM carml/base:amd64-gpu-latest
+
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VCS_URL
+ARG VERSION
+ARG ARCH
+LABEL org.carml.onnx.build-date=$BUILD_DATE \
+  org.carml.onnx.name="onnx" \
+  org.carml.onnx.description="" \
+  org.carml.onnx.url="https://www.carml.org/" \
+  org.carml.onnx.vcs-ref=$VCS_REF \
+  org.carml.onnx.vcs-url=$VCS_URL \
+  org.carml.onnx.vendor="MLModelScope" \
+  org.carml.onnx.arch=$ARCH \
+  org.carml.onnx.version=$VERSION \
+  org.carml.onnx.schema-version="1.0"
+
+#Install dependencies
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test && \
+    add-apt-repository ppa:maarten-fonville/protobuf && \
+    apt-get update -y && apt-get install -y --no-install-recommends \
+    build-essential \
+    protobuf-c-compiler \
+    libprotobuf-dev \
+    protobuf-compiler \
+    wget \
+    zip \
+    ca-certificates \
+    curl \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    python3-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# get rai-project/onnx repository
+ENV PKG github.com/rai-project/onnx
+WORKDIR $GOPATH/src/$PKG
+
+RUN git clone --depth=1 --branch=master https://${PKG}.git . && \
+  cd $GOPATH/src/$PKG && \
+  git submodule update --init --recursive && \
+  dep ensure -vendor-only -v
+
+RUN mkdir onnx/build && cd onnx/build && cmake .. && make && make install
+
+RUN mkdir build && go build -tags=connx -buildmode=c-shared -o build/onnx_go.so main.go
+
+RUN go build -tags=connx
+
+RUN go test -tags=connx -race -v
+
+#build onnxruntime
+ARG ONNXRUNTIME_REPO=https://github.com/Microsoft/onnxruntime
+ARG ONNXRUNTIME_SERVER_BRANCH=master
+
+ENV PATH /opt/miniconda/bin:${PATH}
+
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ~/miniconda.sh --no-check-certificate && /bin/sh ~/miniconda.sh -b -p /opt/miniconda
+
+RUN rm ~/miniconda.sh
+RUN /opt/miniconda/bin/conda clean -tipsy
+RUN find / -type d -name __pycache__ -prune -exec rm -rf {} \;
+
+RUN conda install -y python=3.6 numpy
+RUN rm -rf /opt/miniconda/pkgs
+
+RUN git clone --single-branch --branch ${ONNXRUNTIME_SERVER_BRANCH} --recursive ${ONNXRUNTIME_REPO} onnxruntime && \
+    cd onnxruntime && \
+    ./build.sh --cuda_home /usr/local/cuda --cudnn_home /usr/lib/x86_64-linux-gnu/ --use_cuda --config Release --build_wheel --update --build --cmake_extra_defines ONNXRUNTIME_VERSION=$(cat ./VERSION_NUMBER) && \
+    pip install $GOPATH/src/$PKG/onnxruntime/build/Linux/Release/dist/*.whl && \
+    cd .. && \
+    rm -rf onnxruntime

@@ -20,7 +20,7 @@ func TestUnmarshalModel(t *testing.T) {
 	nodes := graph.GetNode()
 
 	for _, val := range graph.GetValueInfo() {
-		_ := val
+		_ = val
 	}
 
 	assert.Equal(t, int64(3), model.GetIrVersion())
