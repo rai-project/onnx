@@ -9,7 +9,7 @@ jobs:
           cd dockerfiles
           make docker_pull_gpu
           make docker_build_gpu
-          while $(make docker_push_gpu); do :; done
+          ./push.sh docker_push_gpu
   - job: Update_Microbadger
     dependsOn:
       - GPU
